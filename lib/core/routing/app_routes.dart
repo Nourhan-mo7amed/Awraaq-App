@@ -7,5 +7,7 @@ abstract class AppRoutes {
   static const String getstarted = '/getstarted';
   static const String layout = '/layout';
   static const String home = '/home';
-  static const String productsView = '/productsView';
+  static const String search = '/search';
+  static const String saved = '/saved';
+  static const String aiChat = '/aiChat';
 }
