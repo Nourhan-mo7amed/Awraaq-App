@@ -56,6 +56,9 @@ import 'package:awraq/features/auth/presentation/view/login_view.dart';
 import 'package:awraq/features/auth/presentation/view/signup_view.dart';
 
 import '../../features/layout/presentation/views/bottom_nav_view.dart';
+import 'package:awraq/features/onboarding/presentation/views/onboarding_view.dart';
+import 'package:awraq/features/splash/presentation/view/splash_view.dart';
+import 'package:go_router/go_router.dart';
 
 abstract class AppRouter {
   static final router = GoRouter(
@@ -66,6 +69,10 @@ abstract class AppRouter {
         path: AppRoutes.kSplash,
         builder: (context, state) => const SplashView(),
       ),
+      // GoRoute(
+      //   path: AppRoutes.kSplash,
+      //   builder: (context, state) => const SplashView(),
+      // ),
       GoRoute(
         path: AppRoutes.onboarding,
         builder: (context, state) => const OnboardingView(),
