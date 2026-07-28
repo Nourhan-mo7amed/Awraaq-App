@@ -1,5 +1,5 @@
 // DO NOT EDIT. This is code generated via package:intl/generate_localized.dart
-// This is a library that provides messages for a en locale. All the
+// This is a library that provides messages for a ar locale. All the
 // messages from the main program should be duplicated here with the same
 // function name.
 
@@ -18,29 +18,29 @@ final messages = new MessageLookup();
 typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 
 class MessageLookup extends MessageLookupByLibrary {
-  String get localeName => 'en';
+  String get localeName => 'ar';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-    "getStarted": MessageLookupByLibrary.simpleMessage("Get Started"),
-    "next": MessageLookupByLibrary.simpleMessage("Next"),
+    "getStarted": MessageLookupByLibrary.simpleMessage("ابدأ الآن"),
+    "next": MessageLookupByLibrary.simpleMessage("التالي"),
     "onboardingDescription1": MessageLookupByLibrary.simpleMessage(
-      "Awraq brings all your documents and services together — clear, organized, and always at hand.",
+      "يجمع أوراق جميع مستنداتك وخدماتك الحكومية في مكان واحد، بشكل منظم وسهل الوصول إليه.",
     ),
     "onboardingDescription2": MessageLookupByLibrary.simpleMessage(
-      "Step-by-step guidance with required documents, fees, office locations, and processing times.",
+      "إرشادات خطوة بخطوة تشمل المستندات المطلوبة، والرسوم، ومواقع المكاتب، ومدة إنجاز الخدمة.",
     ),
     "onboardingDescription3": MessageLookupByLibrary.simpleMessage(
-      "Your AI-powered guide to government services — ask anything, get clear answers, finish faster.",
+      "مساعدك الذكي للخدمات الحكومية — اسأل أي سؤال واحصل على إجابات واضحة وأنهِ معاملاتك بسرعة.",
     ),
     "onboardingTitle1": MessageLookupByLibrary.simpleMessage(
-      "Lost in government paperwork?",
+      "تائه في الإجراءات الحكومية؟",
     ),
     "onboardingTitle2": MessageLookupByLibrary.simpleMessage(
-      "Know exactly what to do",
+      "اعرف بالضبط ماذا تفعل",
     ),
     "onboardingTitle3": MessageLookupByLibrary.simpleMessage(
-      "Complete any procedure easily",
+      "أنهِ أي إجراء بسهولة",
     ),
   };
 }

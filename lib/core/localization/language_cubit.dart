@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LanguageCubit extends Cubit<LanguageState> {
   LanguageCubit() : super(const LanguageState(Locale('en')));
-// تغير لاي لغة هتديلي الكود بتاعها 
+// تغير لاي لغة هتديلي الكود
   void changeLanguage(Locale languageCode) {
     emit(LanguageState(languageCode));
   }
