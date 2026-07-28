@@ -3,9 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 abstract class AppTextStyles {
-  static TextStyle bold40 = TextStyle(
-    fontSize: 40.sp,
-    fontWeight: FontWeight.w700,
+
+
+  static TextStyle bold28 = TextStyle(
+    fontSize: 28.sp,
+    fontWeight: FontWeight.bold,
   );
 
    static TextStyle bold24 = TextStyle(
@@ -62,8 +64,8 @@ static TextStyle semiBold12 = TextStyle(
     fontSize: 12.sp,
     fontWeight: FontWeight.w500,
   );
-static TextStyle medium16 = TextStyle(
-    fontSize: 16.sp,
+static TextStyle medium18 = TextStyle(
+    fontSize: 18.sp,
     fontWeight: FontWeight.w500,
   );
 
