@@ -56,7 +56,10 @@ import 'package:awraq/features/layout/presentation/views/bottom_nav_view.dart';
 import 'package:awraq/features/onboarding/presentation/views/onboarding_view.dart';
 import 'package:awraq/features/location_details/presentation/views/location_details_view.dart';
 import 'package:awraq/features/location_details/data/models/location_details_model.dart';
+import 'package:awraq/features/saved/presentation/views/saved_services_view.dart';
 import 'package:hugeicons/hugeicons.dart';
+
+
 
 abstract class AppRouter {
   static final router = GoRouter(
@@ -121,8 +124,7 @@ abstract class AppRouter {
             routes: [
               GoRoute(
                 path: AppRoutes.saved,
-                builder: (context, state) =>
-                    const DummyScreen(title: 'Saved View'),
+                builder: (context, state) => const SavedServicesView(),
               ),
             ],
           ),
