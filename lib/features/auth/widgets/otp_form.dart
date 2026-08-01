@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinput/pinput.dart';
-import 'package:provider/provider.dart';
 
-import '../controller/otp_controller.dart';
+import '../presentation/cubit/auth_status.dart';
+import '../presentation/cubit/otp_cubit.dart';
+import '../presentation/cubit/otp_state.dart';
 import 'login_button.dart';
 
 class OtpForm extends StatelessWidget {
@@ -10,66 +12,60 @@ class OtpForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.watch<OtpController>();
+    final cubit = context.read<OtpCubit>();
 
-    return Column(
-      children: [
-
-        Pinput(
-          controller: controller.pinController,
-          length: 6,
-          onChanged: (_) => controller.onChanged(),
-        ),
-
-        if (controller.wrongOtp)
-
-          const Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.only(top: 8),
-              child: Text(
-                "This is incorrect OTP",
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 12,
-                ),
-              ),
-            ),
-          ),
-
-        const SizedBox(height: 25),
-
-        LoginButton(
-  title: "Verify",
-  enabled: controller.enableButton,
-  onPressed: () {
-    controller.verifyOtp(context);
-  },
-),
-
-        const SizedBox(height: 30),
-
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return BlocBuilder<OtpCubit, OtpState>(
+      builder: (context, state) {
+        return Column(
           children: [
-
-            const Text(
-              "Didn't receive the code ? ",
+            Pinput(
+              controller: cubit.pinController,
+              length: 6,
+              onChanged: (_) => cubit.onChanged(),
             ),
 
-            GestureDetector(
-              onTap: () {},
-              child: const Text(
-                "Resend",
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold,
+            if (state.status == AuthStatus.failure)
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 8),
+                  child: Text(
+                    "This is incorrect OTP",
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
                 ),
               ),
+
+            const SizedBox(height: 25),
+
+            LoginButton(
+              title: state.isLoading ? "Verifying..." : "Verify",
+              enabled: cubit.enableButton && !state.isLoading,
+              onPressed: cubit.verifyOtp,
+            ),
+
+            const SizedBox(height: 30),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Didn't receive the code ? "),
+
+                GestureDetector(
+                  onTap: () {},
+                  child: const Text(
+                    "Resend",
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 }

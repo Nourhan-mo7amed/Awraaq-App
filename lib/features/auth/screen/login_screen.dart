@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../core/routing/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
+import '../data/auth_dependencies.dart';
+import '../presentation/cubit/auth_status.dart';
+import '../presentation/cubit/login_cubit.dart';
+import '../presentation/cubit/login_state.dart';
 import '../widgets/auth_footer.dart';
+import '../widgets/auth_header.dart';
 import '../widgets/language_switch.dart';
 import '../widgets/login_form.dart';
-import '../widgets/auth_header.dart';
 import '../widgets/social_button.dart';
 import 'register_screen.dart';
 
@@ -12,7 +20,23 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const _LoginView();
+    return BlocProvider(
+      create: (_) => LoginCubit(buildAuthRepository()),
+      child: BlocListener<LoginCubit, LoginState>(
+        listener: (context, state) {
+          if (state.status == AuthStatus.success) {
+            context.go(AppRoutes.home);
+          }
+
+          if (state.status == AuthStatus.failure && state.message != null) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message!)));
+          }
+        },
+        child: const _LoginView(),
+      ),
+    );
   }
 }
 

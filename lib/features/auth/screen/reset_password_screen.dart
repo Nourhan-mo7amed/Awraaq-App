@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../core/routing/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
-import '../controller/reset_password_controller.dart';
+import '../data/auth_dependencies.dart';
+import '../presentation/cubit/auth_status.dart';
+import '../presentation/cubit/reset_password_cubit.dart';
+import '../presentation/cubit/reset_password_state.dart';
 import '../widgets/reset_password_form.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
@@ -9,9 +15,22 @@ class ResetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ResetPasswordController(),
-      child: const _ResetPasswordView(),
+    return BlocProvider(
+      create: (_) => ResetPasswordCubit(buildAuthRepository()),
+      child: BlocListener<ResetPasswordCubit, ResetPasswordState>(
+        listener: (context, state) {
+          if (state.status == AuthStatus.success) {
+            context.go(AppRoutes.success);
+          }
+
+          if (state.status == AuthStatus.failure && state.message != null) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message!)));
+          }
+        },
+        child: const _ResetPasswordView(),
+      ),
     );
   }
 }

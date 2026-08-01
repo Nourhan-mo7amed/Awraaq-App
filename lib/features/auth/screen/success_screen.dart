@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-
+import '../../../core/routing/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
-import 'login_screen.dart';
 import '../widgets/login_button.dart';
 
 class SuccessScreen extends StatelessWidget {
@@ -66,11 +66,7 @@ class SuccessScreen extends StatelessWidget {
                 title: "Log In",
                 enabled: true,
                 onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (_) => const LoginScreen()),
-                    (route) => false,
-                  );
+                  context.go(AppRoutes.login);
                 },
               ),
 

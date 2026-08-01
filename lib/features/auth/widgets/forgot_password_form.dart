@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../controller/forgot_password_controller.dart';
+import '../../../core/utils/app_validations.dart';
+import '../presentation/cubit/forgot_password_cubit.dart';
+import '../presentation/cubit/forgot_password_state.dart';
 import 'login_button.dart';
 import 'login_text_field.dart';
 
@@ -10,33 +12,35 @@ class ForgotPasswordForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.watch<ForgotPasswordController>();
+    final cubit = context.read<ForgotPasswordCubit>();
 
-    return Form(
-      key: controller.formKey,
-      child: Column(
-        children: [
+    return BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
+      builder: (context, state) {
+        return Form(
+          key: cubit.formKey,
+          child: Column(
+            children: [
+              LoginTextField(
+                controller: cubit.emailController,
+                label: "Email Address",
+                hint: "email@mail.com",
+                icon: Icons.email_outlined,
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) => AppValidator.email(value ?? ''),
+                onChanged: (_) => cubit.onChanged(),
+              ),
 
-          LoginTextField(
-            controller: controller.emailController,
-            label: "Email Address",
-            hint: "email@mail.com",
-            icon: Icons.email_outlined,
-            keyboardType: TextInputType.emailAddress,
-            onChanged: (_) => controller.onChanged(),
+              const SizedBox(height: 30),
+
+              LoginButton(
+                title: state.isLoading ? "Sending..." : "Sent OTP",
+                enabled: cubit.enableButton && !state.isLoading,
+                onPressed: cubit.sendOtp,
+              ),
+            ],
           ),
-
-          const SizedBox(height: 30),
-
-          LoginButton(
-            title: "Sent OTP",
-            enabled: controller.enableButton,
-            onPressed: () {
-  controller.sendOtp(context);
-}
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../core/routing/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
-import '../controller/forgot_password_controller.dart';
+import '../data/auth_dependencies.dart';
+import '../presentation/cubit/auth_status.dart';
+import '../presentation/cubit/forgot_password_cubit.dart';
+import '../presentation/cubit/forgot_password_state.dart';
 import '../widgets/forgot_password_form.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
@@ -10,9 +15,22 @@ class ForgotPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ForgotPasswordController(),
-      child: const _ForgotPasswordView(),
+    return BlocProvider(
+      create: (_) => ForgotPasswordCubit(buildAuthRepository()),
+      child: BlocListener<ForgotPasswordCubit, ForgotPasswordState>(
+        listener: (context, state) {
+          if (state.status == AuthStatus.success) {
+            context.go(AppRoutes.otp);
+          }
+
+          if (state.status == AuthStatus.failure && state.message != null) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message!)));
+          }
+        },
+        child: const _ForgotPasswordView(),
+      ),
     );
   }
 }

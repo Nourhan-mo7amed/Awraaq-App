@@ -41,7 +41,6 @@ dependencies:
   flutter_native_splash: ^2.4.7
   cupertino_icons: ^1.0.8
   go_router: ^17.3.0
-  provider: ^6.1.5+1
   pinput: ^6.0.2 
 
   flutter_localizations:

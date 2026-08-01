@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../controller/login_controller.dart';
+import '../../../core/utils/app_validations.dart';
+import '../presentation/cubit/login_cubit.dart';
+import '../presentation/cubit/login_state.dart';
 import '../screen/forgot_password_screen.dart';
 import 'login_button.dart';
 import 'login_text_field.dart';
@@ -11,63 +13,78 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.watch<LoginController>();
+    final cubit = context.read<LoginCubit>();
 
-    return Column(
-      children: [
-        LoginTextField(
-          controller: controller.emailController,
-          label: "Email Address",
-          hint: "Enter your email",
-          icon: Icons.email_outlined,
-          onChanged: (_) => controller.change(),
-        ),
-
-        const SizedBox(height: 20),
-
-        LoginTextField(
-          controller: controller.passwordController,
-          label: "Password",
-          hint: "Enter your password",
-          icon: Icons.lock_outline,
-          isPassword: true,
-          obscureText: controller.obscure,
-          onToggle: controller.togglePassword,
-          onChanged: (_) => controller.change(),
-          errorText: controller.wrongPassword
-              ? "This password is incorrect."
-              : null,
-        ),
-
-        const SizedBox(height: 10),
-
-        Align(
-          alignment: Alignment.centerLeft,
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ForgotPasswordScreen()),
-              );
-            },
-            child: const Text(
-              "Forgot your password?",
-              style: TextStyle(
-                color: Color(0xff2F80ED),
-                fontWeight: FontWeight.w600,
+    return BlocBuilder<LoginCubit, LoginState>(
+      builder: (context, state) {
+        return Form(
+          key: cubit.formKey,
+          child: Column(
+            children: [
+              LoginTextField(
+                controller: cubit.emailController,
+                label: "Email Address",
+                hint: "Enter your email",
+                icon: Icons.email_outlined,
+                validator: (value) => AppValidator.email(value ?? ''),
+                onChanged: cubit.emailChanged,
               ),
-            ),
+
+              const SizedBox(height: 20),
+
+              LoginTextField(
+                controller: cubit.passwordController,
+                label: "Password",
+                hint: "Enter your password",
+                icon: Icons.lock_outline,
+                isPassword: true,
+                obscureText: state.obscurePassword,
+                onToggle: cubit.togglePassword,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Password is required';
+                  }
+
+                  return null;
+                },
+                onChanged: cubit.passwordChanged,
+                errorText: state.passwordErrorText,
+              ),
+
+              const SizedBox(height: 10),
+
+              Align(
+                alignment: Alignment.centerLeft,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const ForgotPasswordScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "Forgot your password?",
+                    style: TextStyle(
+                      color: Color(0xff2F80ED),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              LoginButton(
+                title: state.isLoading ? "Signing In..." : "Sign In",
+                enabled: cubit.isValid && !state.isLoading,
+                onPressed: cubit.login,
+              ),
+            ],
           ),
-        ),
-
-        const SizedBox(height: 24),
-
-        LoginButton(
-          title: "Sign In",
-          enabled: controller.isValid,
-          onPressed: controller.login,
-        ),
-      ],
+        );
+      },
     );
   }
 }
