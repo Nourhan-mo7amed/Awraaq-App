@@ -1,5 +1,4 @@
 import 'package:awraq/core/routing/app_routes.dart';
-import 'package:awraq/core/theme/app_colors.dart';
 import 'package:awraq/core/theme/app_text_styles.dart';
 import 'package:awraq/core/widgets/custom_button.dart';
 import 'package:awraq/core/widgets/custom_text_widget.dart';
@@ -104,7 +103,7 @@ class OnboardingView extends StatelessWidget {
                                 : S.of(context).next,
                             onPressed: () {
                               if (cubit.isLastPage) {
-                                context.go(AppRoutes.login);
+                                context.go(AppRoutes.home);
                               } else {
                                 cubit.nextPage();
                               }

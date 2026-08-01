@@ -50,25 +50,20 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:awraq/core/routing/app_routes.dart';
-import 'package:awraq/features/splash/presentation/view/splash_view.dart';
-import 'package:awraq/features/onboarding/presentation/view/onboarding_view.dart';
 import 'package:awraq/features/auth/presentation/view/login_view.dart';
 import 'package:awraq/features/auth/presentation/view/signup_view.dart';
-
-import '../../features/layout/presentation/views/bottom_nav_view.dart';
+import 'package:awraq/features/layout/presentation/views/bottom_nav_view.dart';
 import 'package:awraq/features/onboarding/presentation/views/onboarding_view.dart';
-import 'package:awraq/features/splash/presentation/view/splash_view.dart';
-import 'package:go_router/go_router.dart';
+import 'package:awraq/features/location_details/presentation/views/location_details_view.dart';
+import 'package:awraq/features/location_details/data/models/location_details_model.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 abstract class AppRouter {
   static final router = GoRouter(
-    initialLocation: AppRoutes.home,
+    initialLocation: AppRoutes.onboarding,
     routes: [
       // 1. الشاشات العادية (بدون Bottom Navigation Bar)
-      GoRoute(
-        path: AppRoutes.kSplash,
-        builder: (context, state) => const SplashView(),
-      ),
+      // انا يوسف عامل هنا كومنت عشان لسه مفيش SplashScreen
       // GoRoute(
       //   path: AppRoutes.kSplash,
       //   builder: (context, state) => const SplashView(),
@@ -84,6 +79,15 @@ abstract class AppRouter {
       GoRoute(
         path: AppRoutes.signUp,
         builder: (context, state) => const SignUpView(),
+      ),
+      GoRoute(
+        path: AppRoutes.locationDetails,
+        builder: (context, state) {
+          final location = state.extra is LocationDetailsModel
+              ? state.extra as LocationDetailsModel
+              : null;
+          return LocationDetailsView(location: location);
+        },
       ),
 
       // 2. الـ Layout الخاص بالـ Bottom Navigation Bar (يحافظ على حالة التابات)
@@ -146,9 +150,36 @@ class DummyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(
-          title,
-          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: () {
+                context.push(AppRoutes.locationDetails);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF1177FF),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              icon: const HugeIcon(
+                icon: HugeIcons.strokeRoundedLocation01,
+                color: Colors.white,
+                size: 20,
+              ),
+              label: const Text(
+                'Open Location Details',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
         ),
       ),
     );
