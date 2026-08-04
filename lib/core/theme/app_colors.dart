@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-
   // ===== Light =====
   static const Color lightBackground = Color(0xFFF4F6FB);
   static const Color lightSurface = Color(0xFFFFFFFF);
@@ -34,6 +33,9 @@ class AppColors {
   static const Color warning = Color(0xFFF59E0B);
 
   static const Color primary10 = Color(0x1A1177FF); // 10% opacity
+
+  static const Color buttonDisable = Color(0xffD9D9D9);
+  static const Color formFieldBackground = Color(0xffFFFFFF);
 }
 // import 'package:flutter/material.dart';
 

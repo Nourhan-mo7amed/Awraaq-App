@@ -13,16 +13,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:awraq/core/routing/app_routes.dart';
+import 'package:awraq/features/auth/screen/login_screen.dart';
+import 'package:awraq/features/auth/screen/register_screen.dart';
+import 'package:awraq/features/auth/screen/forgot_password_screen.dart';
+import 'package:awraq/features/auth/screen/otp_verification_screen.dart';
+import 'package:awraq/features/auth/screen/reset_password_screen.dart';
+import 'package:awraq/features/auth/screen/success_screen.dart';
+import 'package:awraq/features/home/presentation/home_screen.dart';
+import 'package:awraq/features/onboarding/presentation/view/onboarding_view.dart';
 import 'package:awraq/features/splash/presentation/view/splash_view.dart';
-import 'package:awraq/features/auth/presentation/view/login_view.dart';
-import 'package:awraq/features/auth/presentation/view/signup_view.dart';
-
-import '../../features/layout/presentation/views/bottom_nav_view.dart';
-import 'package:awraq/features/onboarding/presentation/views/onboarding_view.dart';
+import 'package:go_router/go_router.dart';
 
 abstract class AppRouter {
   static final router = GoRouter(
-    initialLocation: AppRoutes.profile,
+    initialLocation: AppRoutes.login,
     routes: [
       // 1. الشاشات العادية (بدون Bottom Navigation Bar)
       GoRoute(
@@ -33,101 +37,52 @@ abstract class AppRouter {
         path: AppRoutes.onboarding,
         builder: (context, state) => const OnboardingView(),
       ),
+
       GoRoute(
         path: AppRoutes.login,
-        builder: (context, state) => LoginView(),
+        builder: (context, state) => const LoginScreen(),
       ),
+
       GoRoute(
         path: AppRoutes.signUp,
-        builder: (context, state) => const SignUpView(),
+
+        builder: (context, state) => const RegisterScreen(),
       ),
+
       GoRoute(
-        path: AppRoutes.profile,
-        builder: (context, state) => BlocProvider(
-          create: (_) => ProfileCubit(
-            repo: getIt<ProfileRepo>(),
-          )..getProfile(),
-          child: const ProfileView(),
-        ),
+        path: AppRoutes.forgotPassword,
+        builder: (context, state) => const ForgotPasswordScreen(),
       ),
+
       GoRoute(
-        path: AppRoutes.theme,
-        builder: (context, state) => const ThemeView(),
+        path: AppRoutes.otp,
+        builder: (context, state) => const OtpScreen(),
       ),
+
       GoRoute(
-        path: AppRoutes.language,
-        builder: (context, state) => const LanguageView(),
+        path: AppRoutes.resetPassword,
+        builder: (context, state) => const ResetPasswordScreen(),
       ),
+
       GoRoute(
-        path: AppRoutes.notifications,
-        builder: (context, state) => const NotificationSettingsView(),
+        path: AppRoutes.success,
+        builder: (context, state) => const SuccessScreen(),
       ),
+
       GoRoute(
-        path: AppRoutes.editProfile,
-        builder: (context, state) => MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (_) => GovernoratesCubit(
-                repo: getIt<GovernoratesRepo>(),
-              )..getGovernorates(),
-            ),
-            BlocProvider(
-              create: (_) => EditProfileCubit(
-                repo: getIt<ProfileRepo>(),
-              )..getProfile(),
-            ),
-          ],
-          child: const EditProfileView(),
-        ),
+        path: AppRoutes.home,
+        builder: (context, state) => const HomeScreen(),
       ),
-      // 2. الـ Layout الخاص بالـ Bottom Navigation Bar (يحافظ على حالة التابات)
-      StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) {
-          return LayoutView(navigationShell: navigationShell);
-        },
-        branches: [
-          // تابة Home
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: AppRoutes.home,
-                builder: (context, state) =>
-                    const DummyScreen(title: 'Home View'),
-              ),
-            ],
-          ),
-          // تابة Search
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: AppRoutes.search,
-                builder: (context, state) =>
-                    const DummyScreen(title: 'Search View'),
-              ),
-            ],
-          ),
-          // تابة Saved
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: AppRoutes.saved,
-                builder: (context, state) =>
-                    const DummyScreen(title: 'Saved View'),
-              ),
-            ],
-          ),
-          // تابة AI Chat
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: AppRoutes.aiChat,
-                builder: (context, state) =>
-                    const DummyScreen(title: 'AI Chat View'),
-              ),
-            ],
-          ),
-        ],
-      ),
+
+      // GoRoute(
+      //   path: AppRoutes.getstarted,
+      //   builder: (context, state) => const GetStartedView(),
+      // ),
+
+      // GoRoute(
+      //   path: AppRoutes.layout,
+      //   builder: (context, state) => const LayoutView(),
+      // ),
     ],
   );
 }
