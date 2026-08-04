@@ -21,5 +21,26 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{};
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "getStarted": MessageLookupByLibrary.simpleMessage("Get Started"),
+    "next": MessageLookupByLibrary.simpleMessage("Next"),
+    "onboardingDescription1": MessageLookupByLibrary.simpleMessage(
+      "Awraq brings all your documents and services together — clear, organized, and always at hand.",
+    ),
+    "onboardingDescription2": MessageLookupByLibrary.simpleMessage(
+      "Step-by-step guidance with required documents, fees, office locations, and processing times.",
+    ),
+    "onboardingDescription3": MessageLookupByLibrary.simpleMessage(
+      "Your AI-powered guide to government services — ask anything, get clear answers, finish faster.",
+    ),
+    "onboardingTitle1": MessageLookupByLibrary.simpleMessage(
+      "Lost in government paperwork?",
+    ),
+    "onboardingTitle2": MessageLookupByLibrary.simpleMessage(
+      "Know exactly what to do",
+    ),
+    "onboardingTitle3": MessageLookupByLibrary.simpleMessage(
+      "Complete any procedure easily",
+    ),
+  };
 }

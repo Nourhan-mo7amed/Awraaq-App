@@ -1,6 +1,6 @@
 abstract class AppRoutes {
   static const String kSplash = '/';
-  static const String onboarding = '/onboarding';
+  static const String onboarding = '/';
   static const String login = '/login';
   static const String signUp = '/signUP';
   static const String forgotPassword = '/forgotpassword';
@@ -10,5 +10,13 @@ abstract class AppRoutes {
   static const String getstarted = '/getstarted';
   static const String layout = '/layout';
   static const String home = '/home';
-  static const String productsView = '/productsView';
+  static const String profile = '/profile';
+  static const String notifications = '/notifications';
+  static const String theme = '/theme';
+  static const String language = '/language';
+  static const String search = '/search';
+  static const String saved = '/saved';
+  static const String editProfile = '/editProfile';
+  static const String aiChat = '/aiChat';
+
 }

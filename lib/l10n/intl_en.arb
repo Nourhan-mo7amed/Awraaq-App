@@ -1,1 +1,13 @@
-{}
+{
+  "onboardingTitle1": "Lost in government paperwork?",
+  "onboardingDescription1": "Awraq brings all your documents and services together — clear, organized, and always at hand.",
+
+  "onboardingTitle2": "Know exactly what to do",
+  "onboardingDescription2": "Step-by-step guidance with required documents, fees, office locations, and processing times.",
+
+  "onboardingTitle3": "Complete any procedure easily",
+  "onboardingDescription3": "Your AI-powered guide to government services — ask anything, get clear answers, finish faster.",
+
+  "next": "Next",
+  "getStarted": "Get Started"
+}
