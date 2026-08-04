@@ -1,19 +1,31 @@
-
 import 'package:awraq/core/api/api_consumer.dart';
+import 'package:awraq/core/api/end_points.dart';
 import 'package:dio/dio.dart';
-
 
 class DioConsumer implements ApiConsumer {
   final Dio dio;
 
   DioConsumer({required this.dio}) {
-    //dio.options.baseUrl = EndPoints.baseUrl;
+    dio.options.baseUrl = EndPoints.baseUrl;
 
     // ✅ لازم تمرري نفس dio للـ interceptor
     // dio.interceptors.add(
     //  // ApiInterceptors(dio: dio),
     // );
+    // dio.interceptors.add(
+    //   InterceptorsWrapper(
+    //     onRequest: (options, handler) async {
+    //       final token = await CacheHelper.getData(key: "token");
 
+    //       if (token != null && token.toString().isNotEmpty) {
+    //         options.headers["Authorization"] = "Bearer $token";
+    //       }
+
+    //       handler.next(options);
+    //     },
+    //   ),
+    // );
+//////
     dio.interceptors.add(
       LogInterceptor(
         requestBody: true,
@@ -80,7 +92,7 @@ class DioConsumer implements ApiConsumer {
 
       return response.data;
     } on DioException catch (e) {
-     // throw ServerException.handleDioError(e);
+      // throw ServerException.handleDioError(e);
     }
   }
 
@@ -100,7 +112,7 @@ class DioConsumer implements ApiConsumer {
 
       return response.data;
     } on DioException catch (e) {
-     // throw ServerException.handleDioError(e);
+      // throw ServerException.handleDioError(e);
     }
   }
 }
