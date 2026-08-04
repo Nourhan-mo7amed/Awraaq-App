@@ -23,12 +23,8 @@ import 'package:awraq/features/auth/screen/otp_verification_screen.dart';
 import 'package:awraq/features/auth/screen/reset_password_screen.dart';
 import 'package:awraq/features/auth/screen/success_screen.dart';
 import 'package:awraq/features/home/presentation/home_screen.dart';
-
 import 'package:awraq/features/splash/presentation/view/splash_view.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
-
-
 
 abstract class AppRouter {
   static final router = GoRouter(
@@ -48,6 +44,18 @@ abstract class AppRouter {
         path: AppRoutes.login,
         builder: (context, state) => const LoginScreen(),
       ),
+       GoRoute(
+        path: AppRoutes.theme,
+        builder: (context, state) => const ThemeView(),
+      ),
+      GoRoute(
+        path: AppRoutes.language,
+        builder: (context, state) => const LanguageView(),
+      ),
+       GoRoute(
+        path: AppRoutes.notifications,
+        builder: (context, state) => const NotificationSettingsView(),
+      ),
       GoRoute(
         path: AppRoutes.locationDetails,
         builder: (context, state) {
@@ -60,7 +68,6 @@ abstract class AppRouter {
 
       GoRoute(
         path: AppRoutes.signUp,
-
         builder: (context, state) => const RegisterScreen(),
       ),
 
@@ -88,7 +95,33 @@ abstract class AppRouter {
         path: AppRoutes.home,
         builder: (context, state) => const HomeScreen(),
       ),
-
+      GoRoute(
+        path: AppRoutes.editProfile,
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) => GovernoratesCubit(
+                repo: getIt<GovernoratesRepo>(),
+              )..getGovernorates(),
+            ),
+            BlocProvider(
+              create: (_) => EditProfileCubit(
+                repo: getIt<ProfileRepo>(),
+              )..getProfile(),
+            ),
+          ],
+          child: const EditProfileView(),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.profile,
+        builder: (context, state) => BlocProvider(
+          create: (_) => ProfileCubit(
+            repo: getIt<ProfileRepo>(),
+          )..getProfile(),
+          child: const ProfileView(),
+        ),
+      ),
       // GoRoute(
       //   path: AppRoutes.getstarted,
       //   builder: (context, state) => const GetStartedView(),
@@ -124,7 +157,8 @@ class DummyScreen extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF1177FF),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -136,7 +170,8 @@ class DummyScreen extends StatelessWidget {
               ),
               label: const Text(
                 'Open Location Details',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
           ],
