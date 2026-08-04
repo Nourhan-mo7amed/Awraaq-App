@@ -28,6 +28,8 @@ import 'package:awraq/features/splash/presentation/view/splash_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 
+
+
 abstract class AppRouter {
   static final router = GoRouter(
     initialLocation: AppRoutes.login,
