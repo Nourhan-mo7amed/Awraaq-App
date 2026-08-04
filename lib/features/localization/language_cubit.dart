@@ -1,4 +1,4 @@
-import 'package:awraq/core/localization/language_state.dart';
+import 'package:awraq/features/localization/presentation/cubit/language_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

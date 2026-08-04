@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'app_colors.dart';
+
 
 abstract class AppTextStyles {
 
@@ -73,4 +75,46 @@ static TextStyle medium18 = TextStyle(
     fontSize: 20.sp,
     fontWeight: FontWeight.w600,
   );
+
+  
+
+  static const welcome = TextStyle(
+    fontSize: 28,
+    fontWeight: FontWeight.w700,
+    color: AppColors.lightTextPrimary,
+  );
+
+  static const subtitle = TextStyle(
+    fontSize: 14,
+    color: Colors.grey,
+  );
+
+  static const label = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: AppColors.lightTextPrimary,
+  );
+
+  static const hint = TextStyle(
+    fontSize: 14,
+    color: AppColors.lightTextTertiary,
+  );
+
+  static const button = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+
+  static const smallBlue = TextStyle(
+    color: AppColors.lightPrimary,
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const error = TextStyle(
+    color: AppColors.error,
+    fontSize: 12,
+  );
+
 }
