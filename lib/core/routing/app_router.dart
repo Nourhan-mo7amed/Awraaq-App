@@ -3,6 +3,7 @@ import 'package:awraq/features/edit_profile/presentation/cubit/edit_profile_cubi
 import 'package:awraq/features/edit_profile/presentation/views/edit_profile_view.dart';
 import 'package:awraq/features/governates/data/repo/governorates_repo.dart';
 import 'package:awraq/features/governates/presentation/cubit/governorates_cubit.dart';
+import 'package:awraq/features/layout/presentation/views/bottom_nav_view.dart';
 import 'package:awraq/features/localization/presentation/views/localization_view.dart';
 import 'package:awraq/features/location_details/data/models/location_details_model.dart';
 import 'package:awraq/features/location_details/presentation/views/location_details_view.dart';
@@ -28,7 +29,7 @@ import 'package:hugeicons/hugeicons.dart';
 
 abstract class AppRouter {
   static final router = GoRouter(
-    initialLocation: AppRoutes.login,
+    initialLocation: AppRoutes.layout,
     routes: [
       // 1. الشاشات العادية (بدون Bottom Navigation Bar)
       GoRoute(
@@ -127,10 +128,10 @@ abstract class AppRouter {
       //   builder: (context, state) => const GetStartedView(),
       // ),
 
-      // GoRoute(
-      //   path: AppRoutes.layout,
-      //   builder: (context, state) => const LayoutView(),
-      // ),
+      GoRoute(
+        path: AppRoutes.layout,
+        builder: (context, state) =>  LayoutView(),
+      ),
     ],
   );
 }
