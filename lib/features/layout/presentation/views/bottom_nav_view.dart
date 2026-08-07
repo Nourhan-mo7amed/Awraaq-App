@@ -17,64 +17,61 @@ class LayoutView extends StatefulWidget {
 class _LayoutViewState extends State<LayoutView> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => LayoutCubit(),
-      child: BlocConsumer<LayoutCubit, LayoutStates>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          return Scaffold(
-            body: context
-                .read<LayoutCubit>()
-                .views[context.read<LayoutCubit>().currentIndex],
-            bottomNavigationBar: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(50),
-                topRight: Radius.circular(50),
-              ),
-              child: BottomNavigationBar(
-                elevation: 0,
-                backgroundColor: AppColors.lightBackground,
-                selectedItemColor: AppColors.primary10,
-                unselectedItemColor: Color.fromARGB(255, 173, 173, 173),
-                // const Color.fromARGB(255, 175, 175, 176),
-                selectedIconTheme: IconThemeData(size: 24),
-                unselectedIconTheme: IconThemeData(size: 20),
-                selectedLabelStyle: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
-                unselectedLabelStyle: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
-                currentIndex: context.read<LayoutCubit>().currentIndex,
-                onTap: (index) {
-                  context.read<LayoutCubit>().changeLayoutNavBarState(index);
-                },
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Icon(LucideIcons.house, size: 22),
-                    label: 'Home',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(LucideIcons.search, size: 22),
-                    label: 'Search',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(LucideIcons.bookmark, size: 22),
-                    label: 'Saved',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(LucideIcons.messageCircle, size: 22),
-                    label: 'AI Chat',
-                  ),
-                ],
-              ),
+    return BlocConsumer<LayoutCubit, LayoutStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return Scaffold(
+          body: context
+              .read<LayoutCubit>()
+              .views[context.read<LayoutCubit>().currentIndex],
+          bottomNavigationBar: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(50),
+              topRight: Radius.circular(50),
             ),
-            //  ),
-          );
-        },
-      ),
+            child: BottomNavigationBar(
+              elevation: 0,
+              backgroundColor: AppColors.lightBackground,
+              selectedItemColor: AppColors.primary10,
+              unselectedItemColor: Color.fromARGB(255, 173, 173, 173),
+              // const Color.fromARGB(255, 175, 175, 176),
+              selectedIconTheme: IconThemeData(size: 24),
+              unselectedIconTheme: IconThemeData(size: 20),
+              selectedLabelStyle: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+              unselectedLabelStyle: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+              currentIndex: context.read<LayoutCubit>().currentIndex,
+              onTap: (index) {
+                context.read<LayoutCubit>().changeLayoutNavBarState(index);
+              },
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(LucideIcons.house, size: 22),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(LucideIcons.search, size: 22),
+                  label: 'Search',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(LucideIcons.bookmark, size: 22),
+                  label: 'Saved',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(LucideIcons.messageCircle, size: 22),
+                  label: 'AI Chat',
+                ),
+              ],
+            ),
+          ),
+          //  ),
+        );
+      },
     );
   }
 }

@@ -3,6 +3,9 @@ import 'package:awraq/features/edit_profile/presentation/cubit/edit_profile_cubi
 import 'package:awraq/features/edit_profile/presentation/views/edit_profile_view.dart';
 import 'package:awraq/features/governates/data/repo/governorates_repo.dart';
 import 'package:awraq/features/governates/presentation/cubit/governorates_cubit.dart';
+import 'package:awraq/features/home/presentation/cubit/home_cubit.dart';
+import 'package:awraq/features/home/presentation/view/home_view.dart';
+import 'package:awraq/features/layout/cubit/layout_cubit/layout_cubit.dart';
 import 'package:awraq/features/layout/presentation/views/bottom_nav_view.dart';
 import 'package:awraq/features/localization/presentation/views/localization_view.dart';
 import 'package:awraq/features/location_details/data/models/location_details_model.dart';
@@ -23,13 +26,15 @@ import 'package:awraq/features/auth/screen/forgot_password_screen.dart';
 import 'package:awraq/features/auth/screen/otp_verification_screen.dart';
 import 'package:awraq/features/auth/screen/reset_password_screen.dart';
 import 'package:awraq/features/auth/screen/success_screen.dart';
-import 'package:awraq/features/home/presentation/home_screen.dart';
 import 'package:awraq/features/splash/presentation/view/splash_view.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 abstract class AppRouter {
   static final router = GoRouter(
-    initialLocation: AppRoutes.layout,
+    initialLocation: //
+    //AppRoutes.profile,
+    AppRoutes.login,
+    //AppRoutes.layout,
     routes: [
       // 1. الشاشات العادية (بدون Bottom Navigation Bar)
       GoRoute(
@@ -45,7 +50,7 @@ abstract class AppRouter {
         path: AppRoutes.login,
         builder: (context, state) => const LoginScreen(),
       ),
-       GoRoute(
+      GoRoute(
         path: AppRoutes.theme,
         builder: (context, state) => const ThemeView(),
       ),
@@ -53,7 +58,7 @@ abstract class AppRouter {
         path: AppRoutes.language,
         builder: (context, state) => const LanguageView(),
       ),
-       GoRoute(
+      GoRoute(
         path: AppRoutes.notifications,
         builder: (context, state) => const NotificationSettingsView(),
       ),
@@ -92,10 +97,13 @@ abstract class AppRouter {
         builder: (context, state) => const SuccessScreen(),
       ),
 
-      GoRoute(
-        path: AppRoutes.home,
-        builder: (context, state) => const HomeScreen(),
-      ),
+      // GoRoute(
+      //   path: AppRoutes.home,
+      //   builder: (context,  state) => BlocProvider(
+      //     create: (_) => getIt<HomeCubit>()..getHomeData(),
+      //     child: const HomeView(),
+      //   ),
+      // ),
       GoRoute(
         path: AppRoutes.editProfile,
         builder: (context, state) => MultiBlocProvider(
@@ -130,7 +138,17 @@ abstract class AppRouter {
 
       GoRoute(
         path: AppRoutes.layout,
-        builder: (context, state) =>  LayoutView(),
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) => LayoutCubit(),
+            ),
+            BlocProvider(
+              create: (_) => getIt<HomeCubit>()..getHomeData(),
+            ),
+          ],
+          child: const LayoutView(),
+        ),
       ),
     ],
   );
