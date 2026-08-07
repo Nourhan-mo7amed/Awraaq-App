@@ -343,7 +343,7 @@ class _SavedServicesViewState extends State<SavedServicesView> {
                                 onDelete: () =>
                                     _showDeleteConfirmDialog(service),
                                 onViewDetails: () {
-                                  context.push(AppRoutes.locationDetails);
+                                  context.push(AppRoutes.procedureDetails);
                                 },
                               );
                             },

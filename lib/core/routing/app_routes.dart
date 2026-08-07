@@ -11,4 +11,5 @@ abstract class AppRoutes {
   static const String saved = '/saved';
   static const String aiChat = '/aiChat';
   static const String locationDetails = '/locationDetails';
+  static const String procedureDetails = '/procedureDetails';
 }

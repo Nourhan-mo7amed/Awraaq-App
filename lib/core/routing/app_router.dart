@@ -56,21 +56,15 @@ import 'package:awraq/features/layout/presentation/views/bottom_nav_view.dart';
 import 'package:awraq/features/onboarding/presentation/views/onboarding_view.dart';
 import 'package:awraq/features/location_details/presentation/views/location_details_view.dart';
 import 'package:awraq/features/location_details/data/models/location_details_model.dart';
+import 'package:awraq/features/procedure_details/presentation/views/procedure_details_view.dart';
+import 'package:awraq/features/procedure_details/data/models/procedure_details_model.dart';
 import 'package:awraq/features/saved/presentation/views/saved_services_view.dart';
 import 'package:hugeicons/hugeicons.dart';
-
-
 
 abstract class AppRouter {
   static final router = GoRouter(
     initialLocation: AppRoutes.onboarding,
     routes: [
-      // 1. الشاشات العادية (بدون Bottom Navigation Bar)
-      // انا يوسف عامل هنا كومنت عشان لسه مفيش SplashScreen
-      // GoRoute(
-      //   path: AppRoutes.kSplash,
-      //   builder: (context, state) => const SplashView(),
-      // ),
       GoRoute(
         path: AppRoutes.onboarding,
         builder: (context, state) => const OnboardingView(),
@@ -90,6 +84,15 @@ abstract class AppRouter {
               ? state.extra as LocationDetailsModel
               : null;
           return LocationDetailsView(location: location);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.procedureDetails,
+        builder: (context, state) {
+          final procedure = state.extra is ProcedureDetailsModel
+              ? state.extra as ProcedureDetailsModel
+              : null;
+          return ProcedureDetailsView(procedure: procedure);
         },
       ),
 
@@ -178,6 +181,28 @@ class DummyScreen extends StatelessWidget {
               ),
               label: const Text(
                 'Open Location Details',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              onPressed: () {
+                context.push(AppRoutes.procedureDetails);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF1177FF),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              icon: const HugeIcon(
+                icon: HugeIcons.strokeRoundedFile02,
+                color: Colors.white,
+                size: 20,
+              ),
+              label: const Text(
+                'Open Procedure Details',
                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
