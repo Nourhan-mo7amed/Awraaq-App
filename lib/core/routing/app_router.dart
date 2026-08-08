@@ -3,6 +3,7 @@ import 'package:awraq/features/edit_profile/presentation/cubit/edit_profile_cubi
 import 'package:awraq/features/edit_profile/presentation/views/edit_profile_view.dart';
 import 'package:awraq/features/governates/data/repo/governorates_repo.dart';
 import 'package:awraq/features/governates/presentation/cubit/governorates_cubit.dart';
+import 'package:awraq/features/layout/cubit/layout_cubit/layout_cubit.dart';
 import 'package:awraq/features/layout/presentation/views/bottom_nav_view.dart';
 import 'package:awraq/features/localization/presentation/views/localization_view.dart';
 import 'package:awraq/features/location_details/data/models/location_details_model.dart';
@@ -45,7 +46,7 @@ abstract class AppRouter {
         path: AppRoutes.login,
         builder: (context, state) => const LoginScreen(),
       ),
-       GoRoute(
+      GoRoute(
         path: AppRoutes.theme,
         builder: (context, state) => const ThemeView(),
       ),
@@ -53,7 +54,7 @@ abstract class AppRouter {
         path: AppRoutes.language,
         builder: (context, state) => const LanguageView(),
       ),
-       GoRoute(
+      GoRoute(
         path: AppRoutes.notifications,
         builder: (context, state) => const NotificationSettingsView(),
       ),
@@ -130,7 +131,10 @@ abstract class AppRouter {
 
       GoRoute(
         path: AppRoutes.layout,
-        builder: (context, state) =>  LayoutView(),
+        builder: (context, state) => BlocProvider(
+          create: (_) => LayoutCubit(),
+          child: const LayoutView(),
+        ),
       ),
     ],
   );
