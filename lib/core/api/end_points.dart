@@ -1,10 +1,10 @@
 abstract class EndPoints {
   static String baseUrl =
-      'https://deemed-controls-hundreds-compatibility.trycloudflare.com/api';
+      'https://boss-task-editions-treasure.trycloudflare.com/api';
 
   // Auth
-  static const String login = 'auth/login';
-  static const String register = 'auth/register';
+  static const String login = '/login';
+  static const String register = '/register';
   static const String forgotPassword = 'auth/forgot-password';
   static const String verifyOtp = 'auth/verify-otp';
   static const String resetPassword = 'auth/reset-password';

@@ -30,7 +30,7 @@ class CategoryList extends StatelessWidget {
             return CategoryItem(
               category: CategoryModel(
                 id: 0,
-                name: "All",
+                name: "All", procedures: [],
                 //icon: null,
               ),
               isSelected: selectedCategoryId == null,

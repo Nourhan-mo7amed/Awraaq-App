@@ -26,7 +26,7 @@ class ServiceCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            service.title,
+            service.name,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 14,
