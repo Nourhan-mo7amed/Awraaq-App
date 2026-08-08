@@ -1,6 +1,5 @@
+import 'package:awraq/core/api/end_points.dart';
 import 'package:dio/dio.dart';
-
-import '../../../../core/api/auth_endpoints.dart';
 import '../models/auth_response.dart';
 
 abstract class AuthRemoteDataSource {
@@ -36,7 +35,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String password,
   }) async {
     final response = await dio.post(
-      AuthEndpoints.login,
+      EndPoints.login,
       data: <String, dynamic>{'email': email, 'password': password},
     );
 
@@ -51,7 +50,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String password,
   }) async {
     final response = await dio.post(
-      AuthEndpoints.register,
+      EndPoints.register,
       data: <String, dynamic>{
         'full_name': fullName,
         'email': email,
@@ -66,7 +65,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<AuthResponse> sendForgotPasswordOtp({required String email}) async {
     final response = await dio.post(
-      AuthEndpoints.forgotPassword,
+     EndPoints.forgotPassword,
       data: <String, dynamic>{'email': email},
     );
 
@@ -76,7 +75,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<AuthResponse> verifyOtp({required String otp}) async {
     final response = await dio.post(
-      AuthEndpoints.verifyOtp,
+      EndPoints.verifyOtp,
       data: <String, dynamic>{'otp': otp},
     );
 
@@ -89,7 +88,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String confirmPassword,
   }) async {
     final response = await dio.post(
-      AuthEndpoints.resetPassword,
+      EndPoints.resetPassword,
       data: <String, dynamic>{
         'password': password,
         'confirm_password': confirmPassword,
@@ -101,7 +100,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<AuthResponse> logout() async {
-    final response = await dio.post(AuthEndpoints.logout);
+    final response = await dio.post(EndPoints.logout);
     return AuthResponse.fromJson(_asMap(response.data));
   }
 

@@ -1,8 +1,17 @@
+import 'package:awraq/core/routing/app_routes.dart';
 import 'package:awraq/core/service_lacoator.dart';
+import 'package:awraq/features/auth/screen/forgot_password_screen.dart';
+import 'package:awraq/features/auth/screen/login_screen.dart';
+import 'package:awraq/features/auth/screen/otp_verification_screen.dart';
+import 'package:awraq/features/auth/screen/register_screen.dart';
+import 'package:awraq/features/auth/screen/reset_password_screen.dart';
+import 'package:awraq/features/auth/screen/success_screen.dart';
 import 'package:awraq/features/edit_profile/presentation/cubit/edit_profile_cubit.dart';
 import 'package:awraq/features/edit_profile/presentation/views/edit_profile_view.dart';
 import 'package:awraq/features/governates/data/repo/governorates_repo.dart';
 import 'package:awraq/features/governates/presentation/cubit/governorates_cubit.dart';
+import 'package:awraq/features/home/presentation/cubit/home_cubit.dart';
+import 'package:awraq/features/home/presentation/view/home_view.dart';
 import 'package:awraq/features/layout/cubit/layout_cubit/layout_cubit.dart';
 import 'package:awraq/features/layout/presentation/views/bottom_nav_view.dart';
 import 'package:awraq/features/localization/presentation/views/localization_view.dart';
@@ -14,29 +23,21 @@ import 'package:awraq/features/profile/data/repo/profile_repository.dart';
 import 'package:awraq/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:awraq/features/profile/presentation/views/profile_view.dart';
 import 'package:awraq/features/settings/presentation/views/theme_view.dart';
+import 'package:awraq/features/splash/presentation/view/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:awraq/core/routing/app_routes.dart';
-import 'package:awraq/features/auth/screen/login_screen.dart';
-import 'package:awraq/features/auth/screen/register_screen.dart';
-import 'package:awraq/features/auth/screen/forgot_password_screen.dart';
-import 'package:awraq/features/auth/screen/otp_verification_screen.dart';
-import 'package:awraq/features/auth/screen/reset_password_screen.dart';
-import 'package:awraq/features/auth/screen/success_screen.dart';
-import 'package:awraq/features/home/presentation/home_screen.dart';
-import 'package:awraq/features/splash/presentation/view/splash_view.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 abstract class AppRouter {
   static final router = GoRouter(
-    initialLocation: AppRoutes.layout,
+    initialLocation: AppRoutes.login,
     routes: [
-      // 1. الشاشات العادية (بدون Bottom Navigation Bar)
       GoRoute(
         path: AppRoutes.kSplash,
         builder: (context, state) => const SplashView(),
       ),
+
       GoRoute(
         path: AppRoutes.onboarding,
         builder: (context, state) => const OnboardingView(),
@@ -46,24 +47,29 @@ abstract class AppRouter {
         path: AppRoutes.login,
         builder: (context, state) => const LoginScreen(),
       ),
+
       GoRoute(
         path: AppRoutes.theme,
         builder: (context, state) => const ThemeView(),
       ),
+
       GoRoute(
         path: AppRoutes.language,
         builder: (context, state) => const LanguageView(),
       ),
+
       GoRoute(
         path: AppRoutes.notifications,
         builder: (context, state) => const NotificationSettingsView(),
       ),
+
       GoRoute(
         path: AppRoutes.locationDetails,
         builder: (context, state) {
           final location = state.extra is LocationDetailsModel
               ? state.extra as LocationDetailsModel
               : null;
+
           return LocationDetailsView(location: location);
         },
       ),
@@ -93,10 +99,16 @@ abstract class AppRouter {
         builder: (context, state) => const SuccessScreen(),
       ),
 
+      // Home
       GoRoute(
         path: AppRoutes.home,
-        builder: (context, state) => const HomeScreen(),
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<HomeCubit>()..getHomeData(),
+          child: const HomeView(),
+        ),
       ),
+
+      // Edit Profile
       GoRoute(
         path: AppRoutes.editProfile,
         builder: (context, state) => MultiBlocProvider(
@@ -115,6 +127,8 @@ abstract class AppRouter {
           child: const EditProfileView(),
         ),
       ),
+
+      // Profile
       GoRoute(
         path: AppRoutes.profile,
         builder: (context, state) => BlocProvider(
@@ -124,15 +138,19 @@ abstract class AppRouter {
           child: const ProfileView(),
         ),
       ),
-      // GoRoute(
-      //   path: AppRoutes.getstarted,
-      //   builder: (context, state) => const GetStartedView(),
-      // ),
 
+      // Layout + Home Cubit
       GoRoute(
         path: AppRoutes.layout,
-        builder: (context, state) => BlocProvider(
-          create: (_) => LayoutCubit(),
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) => LayoutCubit(),
+            ),
+            BlocProvider(
+              create: (_) => getIt<HomeCubit>()..getHomeData(),
+            ),
+          ],
           child: const LayoutView(),
         ),
       ),
@@ -142,7 +160,11 @@ abstract class AppRouter {
 
 class DummyScreen extends StatelessWidget {
   final String title;
-  const DummyScreen({super.key, required this.title});
+
+  const DummyScreen({
+    super.key,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +175,10 @@ class DummyScreen extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 20),
             ElevatedButton.icon(
@@ -162,8 +187,10 @@ class DummyScreen extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF1177FF),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -175,8 +202,10 @@ class DummyScreen extends StatelessWidget {
               ),
               label: const Text(
                 'Open Location Details',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
