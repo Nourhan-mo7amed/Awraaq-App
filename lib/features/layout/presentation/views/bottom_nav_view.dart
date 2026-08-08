@@ -41,7 +41,7 @@ class LayoutView extends StatelessWidget {
               unselectedItemColor: const Color(0xFF9AA8BD),
 
               selectedFontSize: 12,
-              unselectedFontSize: 12,
+               unselectedFontSize: 12,
 
               items: [
                 BottomNavigationBarItem(
