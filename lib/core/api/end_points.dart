@@ -1,6 +1,6 @@
 abstract class EndPoints {
   static String baseUrl =
-      'https://boss-task-editions-treasure.trycloudflare.com/api';
+      'https://signs-micro-arabic-roles.trycloudflare.com/api';
 
   // Auth
   static const String login = '/login';
