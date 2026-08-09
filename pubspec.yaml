@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter  
 
   flutter_screenutil: ^5.9.3
   flutter_bloc: ^9.1.1

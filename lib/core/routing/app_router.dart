@@ -62,14 +62,12 @@ import 'package:awraq/features/settings/presentation/views/theme_view.dart';
 // Splash
 import 'package:awraq/features/splash/presentation/view/splash_view.dart';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hugeicons/hugeicons.dart';
 
 abstract class AppRouter {
   static final router = GoRouter(
-    initialLocation: AppRoutes.home,
+    initialLocation: AppRoutes.login,
     routes: [
       // Splash
       GoRoute(
