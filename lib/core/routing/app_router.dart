@@ -25,13 +25,12 @@ import 'package:awraq/features/profile/presentation/views/profile_view.dart';
 import 'package:awraq/features/settings/presentation/views/theme_view.dart';
 import 'package:awraq/features/splash/presentation/view/splash_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 abstract class AppRouter {
   static final router = GoRouter(
-    initialLocation: AppRoutes.login,
+    initialLocation: AppRoutes.home,
     routes: [
       GoRoute(
         path: AppRoutes.kSplash,
@@ -101,6 +100,50 @@ abstract class AppRouter {
 
       // Home
       GoRoute(
+        path: AppRoutes.notification,
+        builder: (context, state) => const NotificationScreen(),
+      ),
+
+      // 2. الشاشات التي تحتوي على Bottom Navigation Bar
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return LayoutView(navigationShell: navigationShell);
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.home,
+                builder: (context, state) => const HomeScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.search,
+                builder: (context, state) => const SearchView(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.saved,
+                builder: (context, state) => const DummyScreen(title: 'Saved'),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.aiChat,
+                builder: (context, state) =>
+                    const DummyScreen(title: 'AI Chat'),
+              ),
+            ],
+          ),
+        ],
         path: AppRoutes.home,
         builder: (context, state) => BlocProvider(
           create: (_) => getIt<HomeCubit>()..getHomeData(),
