@@ -124,6 +124,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         email: emailController.text.trim(),
         phone: phoneController.text.trim(),
         password: passwordController.text,
+        confirmPassword: confirmPasswordController.text,
       );
 
       emit(

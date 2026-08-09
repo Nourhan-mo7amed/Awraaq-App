@@ -20,4 +20,5 @@ abstract class AppRoutes {
   static const String aiChat = '/aiChat';
   static const String notification = '/notifications';
 
+  static const String locationDetails = '/locationDetails';
 }
