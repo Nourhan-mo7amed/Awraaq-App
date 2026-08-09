@@ -10,12 +10,14 @@ import 'package:awraq/features/auth/screen/success_screen.dart';
 import 'package:awraq/features/home/presentation/home_screen.dart';
 import 'package:awraq/features/splash/presentation/view/splash_view.dart';
 
+import '../../features/layout/presentation/views/bottom_nav_view.dart';
+import '../../features/search/presentation/views/search_view.dart';
 import '../../features/notification/presentation/views/notification_screen.dart';
 import '../../features/onboarding/presentation/views/onboarding_view.dart';
 
 abstract class AppRouter {
   static final router = GoRouter(
-    initialLocation: AppRoutes.notifications,
+    initialLocation: AppRoutes.home,
     routes: [
       // 1. الشاشات العادية (بدون Bottom Navigation Bar)
       GoRoute(
@@ -58,24 +60,51 @@ abstract class AppRouter {
       ),
 
       GoRoute(
-        path: AppRoutes.home,
-        builder: (context, state) => const HomeScreen(),
-      ),
-
-      GoRoute(
         path: AppRoutes.notification,
         builder: (context, state) => const NotificationScreen(),
       ),
 
-      // GoRoute(
-      //   path: AppRoutes.getstarted,
-      //   builder: (context, state) => const GetStartedView(),
-      // ),
-
-      // GoRoute(
-      //   path: AppRoutes.layout,
-      //   builder: (context, state) => const LayoutView(),
-      // ),
+      // 2. الشاشات التي تحتوي على Bottom Navigation Bar
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return LayoutView(navigationShell: navigationShell);
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.home,
+                builder: (context, state) => const HomeScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.search,
+                builder: (context, state) => const SearchView(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.saved,
+                builder: (context, state) => const DummyScreen(title: 'Saved'),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.aiChat,
+                builder: (context, state) =>
+                    const DummyScreen(title: 'AI Chat'),
+              ),
+            ],
+          ),
+        ],
+      ),
     ],
   );
 }
