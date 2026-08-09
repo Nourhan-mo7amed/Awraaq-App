@@ -4,15 +4,19 @@ abstract class AuthRepository {
   Future<AuthResponse> login({required String email, required String password});
 
   Future<AuthResponse> register({
-    required String fullName,
+    required String name,
     required String email,
     required String phone,
     required String password,
+    required String passwordConfirmation,
+    required int governorateId,
   });
 
   Future<AuthResponse> sendForgotPasswordOtp({required String email});
 
   Future<AuthResponse> verifyOtp({required String otp});
+
+  Future<AuthResponse> resendOtp();
 
   Future<AuthResponse> resetPassword({
     required String password,

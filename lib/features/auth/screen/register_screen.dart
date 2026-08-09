@@ -25,7 +25,7 @@ class RegisterScreen extends StatelessWidget {
       child: BlocListener<RegisterCubit, RegisterState>(
         listener: (context, state) {
           if (state.status == AuthStatus.success) {
-            context.go(AppRoutes.home);
+            context.push(AppRoutes.otp);
           }
 
           if (state.status == AuthStatus.failure && state.message != null) {
@@ -64,7 +64,6 @@ class _RegisterViewState extends State<_RegisterView> {
               child: Column(
                 children: [
                   const SizedBox(height: 10),
-
                   Align(
                     alignment: Alignment.centerRight,
                     child: LanguageSwitch(
@@ -76,28 +75,20 @@ class _RegisterViewState extends State<_RegisterView> {
                       },
                     ),
                   ),
-
                   const SizedBox(height: 35),
-
                   const AuthHeader(
                     title: "Join Awraq",
                     subtitle: "Create your account to get started",
                   ),
-
                   const SizedBox(height: 35),
-
                   const RegisterForm(),
-
                   const SizedBox(height: 20),
-
                   LoginButton(
                     title: state.isLoading ? "Creating..." : "Create Account",
                     enabled: cubit.enableButton && !state.isLoading,
                     onPressed: cubit.register,
                   ),
-
                   const SizedBox(height: 20),
-
                   Row(
                     children: const [
                       Expanded(child: Divider()),
@@ -108,19 +99,14 @@ class _RegisterViewState extends State<_RegisterView> {
                       Expanded(child: Divider()),
                     ],
                   ),
-
                   const SizedBox(height: 20),
-
                   SocialButton(onTap: () {}),
-
                   const SizedBox(height: 25),
-
                   const AuthFooter(
                     title: "Already have an account?",
                     action: "Sign In",
                     onTap: null,
                   ),
-
                   const SizedBox(height: 20),
                 ],
               ),

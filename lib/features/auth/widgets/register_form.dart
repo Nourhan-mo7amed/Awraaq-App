@@ -35,9 +35,7 @@ class RegisterForm extends StatelessWidget {
                 },
                 onChanged: (_) => cubit.onChanged(),
               ),
-
               const SizedBox(height: 18),
-
               LoginTextField(
                 controller: cubit.emailController,
                 label: "Email Address",
@@ -46,10 +44,9 @@ class RegisterForm extends StatelessWidget {
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) => AppValidator.email(value ?? ''),
                 onChanged: (_) => cubit.onChanged(),
+                errorText: state.emailErrorText,
               ),
-
               const SizedBox(height: 18),
-
               LoginTextField(
                 controller: cubit.phoneController,
                 label: "Phone Number",
@@ -65,9 +62,7 @@ class RegisterForm extends StatelessWidget {
                 },
                 onChanged: (_) => cubit.onChanged(),
               ),
-
               const SizedBox(height: 18),
-
               LoginTextField(
                 controller: cubit.passwordController,
                 label: "Password",
@@ -80,13 +75,9 @@ class RegisterForm extends StatelessWidget {
                 onChanged: (_) => cubit.onChanged(),
                 errorText: state.passwordErrorText,
               ),
-
               const SizedBox(height: 10),
-
               PasswordStrength(strength: cubit.strength),
-
               const SizedBox(height: 18),
-
               LoginTextField(
                 controller: cubit.confirmPasswordController,
                 label: "Confirm Password",
@@ -99,9 +90,7 @@ class RegisterForm extends StatelessWidget {
                 onChanged: (_) => cubit.onChanged(),
                 errorText: state.confirmPasswordErrorText,
               ),
-
               const SizedBox(height: 20),
-
               TermsCheckbox(
                 value: state.agreeTerms,
                 onChanged: cubit.changeAgree,

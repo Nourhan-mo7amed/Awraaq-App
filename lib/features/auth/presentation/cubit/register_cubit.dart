@@ -27,6 +27,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   bool obscurePassword = true;
   bool obscureConfirmPassword = true;
   bool agreeTerms = false;
+  int governorateId = 2;
 
   bool get enableButton =>
       fullNameController.text.isNotEmpty &&
@@ -55,7 +56,14 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
 
   void onChanged() {
-    emit(state.copyWith(revision: state.revision + 1));
+    emit(
+      state.copyWith(
+        revision: state.revision + 1,
+        emailErrorText: null,
+        passwordErrorText: null,
+        confirmPasswordErrorText: null,
+      ),
+    );
   }
 
   void togglePassword() {
@@ -120,10 +128,12 @@ class RegisterCubit extends Cubit<RegisterState> {
 
     try {
       await _repository.register(
-        fullName: fullNameController.text.trim(),
+        name: fullNameController.text.trim(),
         email: emailController.text.trim(),
         phone: phoneController.text.trim(),
         password: passwordController.text,
+        passwordConfirmation: confirmPasswordController.text,
+        governorateId: governorateId,
       );
 
       emit(
@@ -133,13 +143,36 @@ class RegisterCubit extends Cubit<RegisterState> {
         ),
       );
     } catch (error) {
-      emit(
-        state.copyWith(
+      final message = AuthErrorMapper.message(error);
+
+      // Map validation errors to the appropriate field error texts
+      if (message.toLowerCase().contains('email')) {
+        emit(state.copyWith(
+          status: AuthStatus.validationError,
+          revision: state.revision + 1,
+          emailErrorText: message,
+        ));
+      } else if (message.toLowerCase().contains('password')) {
+        emit(state.copyWith(
+          status: AuthStatus.validationError,
+          revision: state.revision + 1,
+          passwordErrorText: message,
+        ));
+      } else if (message.toLowerCase().contains('phone')) {
+        // No dedicated phone error field, show generic failure
+        emit(state.copyWith(
           status: AuthStatus.failure,
           revision: state.revision + 1,
-          message: AuthErrorMapper.message(error),
-        ),
-      );
+          message: message,
+        ));
+      } else {
+        // Fallback for other errors
+        emit(state.copyWith(
+          status: AuthStatus.failure,
+          revision: state.revision + 1,
+          message: message,
+        ));
+      }
     }
   }
 

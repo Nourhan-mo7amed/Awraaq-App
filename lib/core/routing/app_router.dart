@@ -17,7 +17,7 @@ import '../../features/onboarding/presentation/views/onboarding_view.dart';
 
 abstract class AppRouter {
   static final router = GoRouter(
-    initialLocation: AppRoutes.home,
+    initialLocation: AppRoutes.login,
     routes: [
       // 1. الشاشات العادية (بدون Bottom Navigation Bar)
       GoRoute(

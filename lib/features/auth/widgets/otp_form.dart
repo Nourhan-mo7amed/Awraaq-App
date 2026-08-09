@@ -24,38 +24,38 @@ class OtpForm extends StatelessWidget {
               onChanged: (_) => cubit.onChanged(),
             ),
 
-            if (state.status == AuthStatus.failure)
-              const Align(
+            // Show OTP verification error if any
+            if (state.otpErrorText != null)
+              Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: EdgeInsets.only(top: 8),
+                  padding: const EdgeInsets.only(top: 8),
                   child: Text(
-                    "This is incorrect OTP",
-                    style: TextStyle(color: Colors.red, fontSize: 12),
+                    state.otpErrorText!,
+                    style: const TextStyle(color: Colors.red, fontSize: 12),
                   ),
                 ),
               ),
-
             const SizedBox(height: 25),
-
             LoginButton(
               title: state.isLoading ? "Verifying..." : "Verify",
               enabled: cubit.enableButton && !state.isLoading,
               onPressed: cubit.verifyOtp,
             ),
-
             const SizedBox(height: 30),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text("Didn't receive the code ? "),
-
                 GestureDetector(
-                  onTap: () {},
-                  child: const Text(
-                    "Resend",
-                    style: TextStyle(
+                  onTap: state.cooldownSeconds > 0
+                      ? null
+                      : () => cubit.resendOtp(),
+                  child: Text(
+                    state.cooldownSeconds > 0
+                        ? "Resend (${state.cooldownSeconds}s)"
+                        : "Resend",
+                    style: const TextStyle(
                       color: Colors.blue,
                       fontWeight: FontWeight.bold,
                     ),

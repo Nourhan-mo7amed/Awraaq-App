@@ -1,6 +1,7 @@
 import 'package:awraq/core/api/api_consumer.dart';
 import 'package:awraq/core/api/end_points.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class DioConsumer implements ApiConsumer {
   final Dio dio;
@@ -8,24 +9,21 @@ class DioConsumer implements ApiConsumer {
   DioConsumer({required this.dio}) {
     dio.options.baseUrl = EndPoints.baseUrl;
 
-    // ✅ لازم تمرري نفس dio للـ interceptor
-    // dio.interceptors.add(
-    //  // ApiInterceptors(dio: dio),
-    // );
-    // dio.interceptors.add(
-    //   InterceptorsWrapper(
-    //     onRequest: (options, handler) async {
-    //       final token = await CacheHelper.getData(key: "token");
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          try {
+            const storage = FlutterSecureStorage();
+            final token = await storage.read(key: 'access_token');
+            if (token != null && token.isNotEmpty) {
+              options.headers['Authorization'] = 'Bearer $token';
+            }
+          } catch (_) {}
+          handler.next(options);
+        },
+      ),
+    );
 
-    //       if (token != null && token.toString().isNotEmpty) {
-    //         options.headers["Authorization"] = "Bearer $token";
-    //       }
-
-    //       handler.next(options);
-    //     },
-    //   ),
-    // );
-//////
     dio.interceptors.add(
       LogInterceptor(
         requestBody: true,

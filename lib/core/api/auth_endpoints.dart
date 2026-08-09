@@ -1,13 +1,15 @@
+import 'package:awraq/core/api/end_points.dart';
+
 class AuthEndpoints {
   AuthEndpoints._();
 
-  static const String baseUrl =
-      'https://creature-prototype-organisation-advertising.trycloudflare.com/api/';
+  static String get baseUrl => '${EndPoints.baseUrl}/';
 
-  static const String login = 'auth/login';
-  static const String register = 'auth/register';
-  static const String forgotPassword = 'auth/forgot-password';
-  static const String verifyOtp = 'auth/verify-otp';
-  static const String resetPassword = 'auth/reset-password';
-  static const String logout = 'auth/logout';
+  static const String login = 'login';
+  static const String register = 'register';
+  static const String forgotPassword = 'forgot-password';
+  static const String verifyOtp = 'verify-otp';
+  static const String resetPassword = 'reset-password';
+  static const String resendOtp = 'resend-otp';
+  static const String logout = 'logout';
 }

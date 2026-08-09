@@ -9,8 +9,8 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({
     required AuthRemoteDataSource remoteDataSource,
     required AuthLocalDataSource localDataSource,
-  }) : _remoteDataSource = remoteDataSource,
-       _localDataSource = localDataSource;
+  })  : _remoteDataSource = remoteDataSource,
+        _localDataSource = localDataSource;
 
   final AuthRemoteDataSource _remoteDataSource;
   final AuthLocalDataSource _localDataSource;
@@ -35,16 +35,20 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<AuthResponse> register({
-    required String fullName,
+    required String name,
     required String email,
     required String phone,
     required String password,
+    required String passwordConfirmation,
+    required int governorateId,
   }) async {
     final response = await _remoteDataSource.register(
-      fullName: fullName,
+      name: name,
       email: email,
       phone: phone,
       password: password,
+      passwordConfirmation: passwordConfirmation,
+      governorateId: governorateId,
     );
 
     final token = response.accessToken;
@@ -74,6 +78,11 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<AuthResponse> verifyOtp({required String otp}) {
     return _remoteDataSource.verifyOtp(otp: otp);
+  }
+
+  @override
+  Future<AuthResponse> resendOtp() {
+    return _remoteDataSource.resendOtp();
   }
 
   @override

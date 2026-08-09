@@ -7,15 +7,19 @@ abstract class AuthRemoteDataSource {
   Future<AuthResponse> login({required String email, required String password});
 
   Future<AuthResponse> register({
-    required String fullName,
+    required String name,
     required String email,
     required String phone,
     required String password,
+    required String passwordConfirmation,
+    required int governorateId,
   });
 
   Future<AuthResponse> sendForgotPasswordOtp({required String email});
 
   Future<AuthResponse> verifyOtp({required String otp});
+
+  Future<AuthResponse> resendOtp();
 
   Future<AuthResponse> resetPassword({
     required String password,
@@ -45,18 +49,22 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<AuthResponse> register({
-    required String fullName,
+    required String name,
     required String email,
     required String phone,
     required String password,
+    required String passwordConfirmation,
+    required int governorateId,
   }) async {
     final response = await dio.post(
       AuthEndpoints.register,
       data: <String, dynamic>{
-        'full_name': fullName,
+        'name': name,
         'email': email,
         'phone': phone,
         'password': password,
+        'password_confirmation': passwordConfirmation,
+        'governorate_id': governorateId,
       },
     );
 
@@ -77,9 +85,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<AuthResponse> verifyOtp({required String otp}) async {
     final response = await dio.post(
       AuthEndpoints.verifyOtp,
-      data: <String, dynamic>{'otp': otp},
+      data: <String, dynamic>{'code': otp},
     );
 
+    return AuthResponse.fromJson(_asMap(response.data));
+  }
+
+  @override
+  Future<AuthResponse> resendOtp() async {
+    final response = await dio.post(AuthEndpoints.resendOtp);
     return AuthResponse.fromJson(_asMap(response.data));
   }
 

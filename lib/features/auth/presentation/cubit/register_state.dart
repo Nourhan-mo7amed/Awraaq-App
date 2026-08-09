@@ -7,6 +7,7 @@ class RegisterState {
     this.obscurePassword = true,
     this.obscureConfirmPassword = true,
     this.agreeTerms = false,
+    this.emailErrorText,
     this.passwordErrorText,
     this.confirmPasswordErrorText,
     this.message,
@@ -17,6 +18,7 @@ class RegisterState {
   final bool obscurePassword;
   final bool obscureConfirmPassword;
   final bool agreeTerms;
+  final String? emailErrorText;
   final String? passwordErrorText;
   final String? confirmPasswordErrorText;
   final String? message;
@@ -29,6 +31,7 @@ class RegisterState {
     bool? obscurePassword,
     bool? obscureConfirmPassword,
     bool? agreeTerms,
+    String? emailErrorText,
     String? passwordErrorText,
     String? confirmPasswordErrorText,
     String? message,
@@ -40,6 +43,7 @@ class RegisterState {
       obscureConfirmPassword:
           obscureConfirmPassword ?? this.obscureConfirmPassword,
       agreeTerms: agreeTerms ?? this.agreeTerms,
+      emailErrorText: emailErrorText,
       passwordErrorText: passwordErrorText,
       confirmPasswordErrorText: confirmPasswordErrorText,
       message: message,
