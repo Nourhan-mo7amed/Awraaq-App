@@ -21,4 +21,5 @@ abstract class AppRoutes {
   static const String notification = '/notifications';
 
   static const String locationDetails = '/locationDetails';
+  static const String procedureDetails = '/procedureDetails';
 }

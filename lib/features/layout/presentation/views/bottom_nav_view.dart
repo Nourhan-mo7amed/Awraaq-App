@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class LayoutView extends StatelessWidget {
-  const LayoutView({super.key});
+  const LayoutView({super.key, });
 
   @override
   Widget build(BuildContext context) {
