@@ -1,47 +1,88 @@
+import 'package:awraq/core/service_lacoator.dart';
 import 'package:awraq/core/theme/app_colors.dart';
 import 'package:awraq/core/theme/app_text_styles.dart';
 import 'package:awraq/features/location_details/data/models/location_details_model.dart';
+import 'package:awraq/features/location_details/presentation/cubit/location_details_cubit.dart';
+import 'package:awraq/features/location_details/presentation/cubit/location_details_state.dart';
 import 'package:awraq/features/location_details/presentation/views/widgets/location_action_buttons.dart';
 import 'package:awraq/features/location_details/presentation/views/widgets/location_header_image.dart';
 import 'package:awraq/features/location_details/presentation/views/widgets/location_info_section.dart';
 import 'package:awraq/features/location_details/presentation/views/widgets/note_card_item.dart';
 import 'package:awraq/features/location_details/presentation/views/widgets/notes_section.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 
-class LocationDetailsView extends StatefulWidget {
+class LocationDetailsView extends StatelessWidget {
+  final dynamic locationId;
   final LocationDetailsModel? location;
 
   const LocationDetailsView({
     super.key,
+    this.locationId,
     this.location,
   });
 
   @override
-  State<LocationDetailsView> createState() => _LocationDetailsViewState();
+  Widget build(BuildContext context) {
+    return BlocProvider<LocationDetailsCubit>(
+      create: (context) {
+        final cubit = getIt<LocationDetailsCubit>();
+        if (location != null) {
+          cubit.setLocationDetails(location!);
+        } else {
+          cubit.getLocationDetails(locationId ?? 2);
+        }
+        return cubit;
+      },
+      child: LocationDetailsBody(
+        locationId: locationId ?? 2,
+        initialLocation: location,
+      ),
+    );
+  }
 }
 
-class _LocationDetailsViewState extends State<LocationDetailsView> {
-  late LocationDetailsModel _locationData;
+class LocationDetailsBody extends StatefulWidget {
+  final dynamic locationId;
+  final LocationDetailsModel? initialLocation;
+
+  const LocationDetailsBody({
+    super.key,
+    required this.locationId,
+    this.initialLocation,
+  });
+
+  @override
+  State<LocationDetailsBody> createState() => _LocationDetailsBodyState();
+}
+
+class _LocationDetailsBodyState extends State<LocationDetailsBody> {
+  LocationDetailsModel? _locationData;
   late bool _isFavorite;
 
   @override
   void initState() {
     super.initState();
-    _locationData = widget.location ?? LocationDetailsModel.mockData;
-    _isFavorite = _locationData.isFavorite;
+    if (widget.initialLocation != null) {
+      _locationData = widget.initialLocation;
+      _isFavorite = widget.initialLocation!.isFavorite;
+    } else {
+      _isFavorite = false;
+    }
   }
 
   void _handleNoteMenuAction(NoteMenuAction action, LocationNoteModel note) {
+    if (_locationData == null) return;
     switch (action) {
       case NoteMenuAction.edit:
         _showSnackBar('Edit note selected for "${note.userName}"');
         break;
       case NoteMenuAction.delete:
         setState(() {
-          _locationData.notes.removeWhere((n) => n.id == note.id);
+          _locationData!.notes.removeWhere((n) => n.id == note.id);
         });
         _showSnackBar('Note deleted successfully');
         break;
@@ -52,6 +93,7 @@ class _LocationDetailsViewState extends State<LocationDetailsView> {
   }
 
   void _showAddNoteDialog() {
+    if (_locationData == null) return;
     final TextEditingController textController = TextEditingController();
     int selectedRating = 5;
 
@@ -71,7 +113,6 @@ class _LocationDetailsViewState extends State<LocationDetailsView> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title
                     Center(
                       child: Text(
                         'Add Note',
@@ -81,8 +122,6 @@ class _LocationDetailsViewState extends State<LocationDetailsView> {
                       ),
                     ),
                     SizedBox(height: 20.h),
-
-                    // Label
                     Text(
                       'My note',
                       style: AppTextStyles.regular14.copyWith(
@@ -90,8 +129,6 @@ class _LocationDetailsViewState extends State<LocationDetailsView> {
                       ),
                     ),
                     SizedBox(height: 8.h),
-
-                    // Text Field
                     TextField(
                       controller: textController,
                       maxLines: 3,
@@ -127,8 +164,6 @@ class _LocationDetailsViewState extends State<LocationDetailsView> {
                       ),
                     ),
                     SizedBox(height: 16.h),
-
-                    // Rating label
                     Text(
                       'Rating',
                       style: AppTextStyles.regular14.copyWith(
@@ -136,8 +171,6 @@ class _LocationDetailsViewState extends State<LocationDetailsView> {
                       ),
                     ),
                     SizedBox(height: 6.h),
-
-                    // Star selector
                     Row(
                       children: List.generate(5, (index) {
                         return GestureDetector(
@@ -155,11 +188,8 @@ class _LocationDetailsViewState extends State<LocationDetailsView> {
                       }),
                     ),
                     SizedBox(height: 24.h),
-
-                    // Buttons row
                     Row(
                       children: [
-                        // Cancel
                         Expanded(
                           child: OutlinedButton(
                             onPressed: () => Navigator.pop(dialogContext),
@@ -180,23 +210,20 @@ class _LocationDetailsViewState extends State<LocationDetailsView> {
                           ),
                         ),
                         SizedBox(width: 12.w),
-                        // Add Note
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () {
                               if (textController.text.trim().isNotEmpty) {
                                 setState(() {
-                                  _locationData.notes.insert(
+                                  _locationData!.notes.insert(
                                     0,
                                     LocationNoteModel(
-                                      id: DateTime.now()
-                                          .millisecondsSinceEpoch
-                                          .toString(),
+                                      id: DateTime.now().millisecondsSinceEpoch,
+                                      content: textController.text.trim(),
                                       userName: 'Current User',
                                       userAvatarUrl: '',
                                       timeAgo: 'Just now',
-                                      rating: selectedRating.toDouble(),
-                                      noteText: textController.text.trim(),
+                                      rating: selectedRating,
                                       isUserNote: true,
                                     ),
                                   );
@@ -298,45 +325,100 @@ class _LocationDetailsViewState extends State<LocationDetailsView> {
           SizedBox(width: 4.w),
         ],
       ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 1. Header Banner Image
-            LocationHeaderImage(imageUrl: _locationData.imageUrl),
-            SizedBox(height: 16.h),
+      body: BlocConsumer<LocationDetailsCubit, LocationDetailsState>(
+        listener: (context, state) {
+          if (state is LocationDetailsSuccess) {
+            setState(() {
+              _locationData = state.locationDetails;
+              _isFavorite = state.locationDetails.isFavorite;
+            });
+          }
+        },
+        builder: (context, state) {
+          if (state is LocationDetailsLoading && _locationData == null) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-            // 2. Location Info Section (flat, no card)
-            LocationInfoSection(
-              name: _locationData.name,
-              category: _locationData.category,
-              status: _locationData.status,
-              rating: _locationData.rating,
-              reviewsCount: _locationData.reviewsCount,
-              address: _locationData.address,
-              workingHours: _locationData.workingHours,
-              phoneNumber: _locationData.phoneNumber,
-            ),
-            SizedBox(height: 14.h),
+          if (state is LocationDetailsFailure && _locationData == null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    state.error,
+                    style: AppTextStyles.regular14.copyWith(
+                      fontSize: 16.sp,
+                      color: AppColors.error,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 16.h),
+                  ElevatedButton(
+                    onPressed: () {
+                      context
+                          .read<LocationDetailsCubit>()
+                          .getLocationDetails(widget.locationId);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.lightPrimary,
+                    ),
+                    child: Text(
+                      'Retry',
+                      style: AppTextStyles.semiBold14.copyWith(
+                        color: AppColors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
 
-            // 3. Action Buttons (stacked vertically)
-            LocationActionButtons(
-              onOpenInMaps: () => _showSnackBar('Opening in Maps...'),
-              onGetDirections: () => _showSnackBar('Getting Directions...'),
-            ),
-            SizedBox(height: 20.h),
+          final location = _locationData ?? widget.initialLocation ?? LocationDetailsModel.mockData;
 
-            // 4. Notes Section Header & Note Cards
-            NotesSection(
-              notes: _locationData.notes,
-              onAddNote: _showAddNoteDialog,
-              onNoteMenuSelected: _handleNoteMenuAction,
+          return SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 1. Header Banner Image
+                LocationHeaderImage(imageUrl: location.imageUrl),
+                SizedBox(height: 16.h),
+
+                // 2. Location Info Section
+                LocationInfoSection(
+                  name: location.name,
+                  category: location.category,
+                  status: location.status,
+                  rating: location.rating,
+                  reviewsCount: location.reviewsCount,
+                  address: location.address,
+                  workingHours: location.workingHours,
+                  phoneNumber: location.phoneNumber,
+                ),
+                SizedBox(height: 14.h),
+
+                // 3. Action Buttons
+                LocationActionButtons(
+                  onOpenInMaps: () => _showSnackBar('Opening in Maps...'),
+                  onGetDirections: () => _showSnackBar('Getting Directions...'),
+                ),
+                SizedBox(height: 20.h),
+
+                // 4. Notes Section Header & Note Cards
+                NotesSection(
+                  notes: location.notes,
+                  onAddNote: _showAddNoteDialog,
+                  onNoteMenuSelected: _handleNoteMenuAction,
+                ),
+                SizedBox(height: 24.h),
+              ],
             ),
-            SizedBox(height: 24.h),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
