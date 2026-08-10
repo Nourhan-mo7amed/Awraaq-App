@@ -1,4 +1,4 @@
-import 'package:awraq/features/notification/presentation/models/notification_model.dart';
+import 'package:awraq/features/notification/data/models/notification_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -41,7 +41,7 @@ class NotificationDialog extends StatelessWidget {
             SizedBox(height: 12.h),
 
             Text(
-              notification.description,
+              notification.message,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14.sp,

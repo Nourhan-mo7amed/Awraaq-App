@@ -12,6 +12,9 @@ import 'package:awraq/features/location_details/presentation/cubit/location_deta
 import 'package:awraq/features/procedure_details/data/repo/procedure_details_repo.dart';
 import 'package:awraq/features/procedure_details/data/repo_impl/procedure_details_repo_impl.dart';
 import 'package:awraq/features/procedure_details/presentation/cubit/procedure_details_cubit.dart';
+import 'package:awraq/features/notification/data/repo/notification_repo.dart';
+import 'package:awraq/features/notification/data/repo_impl/notification_repo_impl.dart';
+import 'package:awraq/features/notification/presentation/cubit/notification_cubit.dart';
 import 'package:awraq/features/profile/data/repo/profile_repository.dart';
 import 'package:awraq/features/profile/data/repo/profile_repository_impl.dart';
 import 'package:dio/dio.dart';
@@ -103,6 +106,26 @@ Future<void> setupServiceLocator() async {
       getIt<ProcedureDetailsRepo>(),
     ),
   );
+ // Notification Repository
+  // =========================
+
+  getIt.registerLazySingleton<NotificationRepo>(
+    () => NotificationRepoImpl(
+      api: getIt<ApiConsumer>(),
+    ),
+  );
+
+  // =========================
+  // Notification Cubit
+  // =========================
+
+  getIt.registerFactory<NotificationCubit>(
+    () => NotificationCubit(
+      repo: getIt<NotificationRepo>(),
+    ),
+  );
+
+
 }
 
 

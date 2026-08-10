@@ -53,7 +53,7 @@ class ProfileUserCard extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 28.r,
-                    backgroundImage: NetworkImage(user.avatar),
+                    backgroundImage: NetworkImage(user.avatar??''),
                   ),
 
                   SizedBox(width: 12.w),

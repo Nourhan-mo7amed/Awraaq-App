@@ -18,7 +18,8 @@ abstract class AppRoutes {
   static const String saved = '/saved';
   static const String editProfile = '/editProfile';
   static const String aiChat = '/aiChat';
-  static const String notification = '/notifications';
+  static const String notificationSetting = '/notificationsSetting';
+
 
   static const String locationDetails = '/locationDetails';
   static const String procedureDetails = '/procedureDetails';

@@ -9,9 +9,12 @@ class HomeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const CircleAvatar(
-          radius: 22,
-          backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=11'), // الصورة الشخصية
+        GestureDetector(
+          onTap:()=> context.push(AppRoutes.profile),
+          child: const CircleAvatar(
+            radius: 22,
+            backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=11'), // الصورة الشخصية
+          ),
         ),
         const SizedBox(width: 12),
         const Text(
@@ -33,6 +36,7 @@ class HomeHeader extends StatelessWidget {
           onPressed: () {
             context.push(AppRoutes.notification);
           },
+          onPressed: () =>context.push(AppRoutes.notifications),
           icon: const Icon(Icons.notifications_none_outlined, color: Colors.blue),
         ),
       ],

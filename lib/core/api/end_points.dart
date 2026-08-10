@@ -25,6 +25,8 @@ abstract class EndPoints {
 
   // Procedure Details
   static const String procedureDetails = '/procedures/';
+   static const String notifications = "/notifications";
+   static const String deviceTokens = '/device-tokens';
 }
 
 // abstract class EndPoints {
