@@ -33,7 +33,7 @@ class FirebaseNotificationService {
 
     await _createNotificationChannel();
 
-    await _getFcmToken();
+    await getFcmToken();
 
     _listenToForegroundMessages();
 
@@ -116,7 +116,8 @@ class FirebaseNotificationService {
   // FCM TOKEN
   // ============================================================
 
-  Future<String?> _getFcmToken() async {
+  Future<String?> getFcmToken() async {
+  try {
     final token = await _messaging.getToken();
 
     print('================================');
@@ -124,7 +125,11 @@ class FirebaseNotificationService {
     print('================================');
 
     return token;
+  } catch (e) {
+    print('Failed to get FCM Token: $e');
+    return null;
   }
+}
 
   // ============================================================
   // FOREGROUND

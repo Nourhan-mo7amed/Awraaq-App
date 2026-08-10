@@ -14,17 +14,44 @@ class NotificationRepoImpl implements NotificationRepo {
   @override
   Future<List<NotificationModel>> getNotifications() async {
     final response = await api.get(
-      path: EndPoints.notifications, data: null,
+      path: EndPoints.notifications,
+      data: null,
     );
 
-    final List data = response['data'] ?? [];
+    final List<dynamic> data = response['data'] ?? [];
 
     return data
         .map(
           (item) => NotificationModel.fromJson(
-            item as Map<String, dynamic>,
+            Map<String, dynamic>.from(item),
           ),
         )
         .toList();
+  }
+
+  @override
+  Future<void> registerFcmToken(String fcmToken) async {
+    await api.post(
+      path: EndPoints.deviceTokens,
+      data: {
+        'fcm_token': fcmToken,
+      },
+    );
+  }
+
+  @override
+  Future<void> markAsRead(int notificationId) async {
+    await api.patch(
+      path: '${EndPoints.notifications}/$notificationId/read',
+      data: null,
+    );
+  }
+
+  @override
+  Future<void> markAllAsRead() async {
+    await api.patch(
+      path: '${EndPoints.notifications}/read-all',
+      data: null,
+    );
   }
 }

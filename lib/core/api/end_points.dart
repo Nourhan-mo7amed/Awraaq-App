@@ -20,6 +20,7 @@ abstract class EndPoints {
   // Home
   static const String category = '/category';
    static const String notifications = "/notifications";
+   static const String deviceTokens = '/device-tokens';
 }
 // abstract class EndPoints {
 //   static String baseUrl =
