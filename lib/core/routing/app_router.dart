@@ -31,6 +31,7 @@ import 'package:awraq/features/localization/presentation/views/localization_view
 // Location Details
 import 'package:awraq/features/location_details/data/models/location_details_model.dart';
 import 'package:awraq/features/location_details/presentation/views/location_details_view.dart';
+import 'package:awraq/features/notification/presentation/cubit/notification_cubit.dart';
 
 // Notification
 import 'package:awraq/features/notification/presentation/views/notification_screen.dart';
@@ -124,11 +125,21 @@ abstract class AppRouter {
       ),
 
       GoRoute(
-        path: AppRoutes.notifications,
+        path: AppRoutes.notificationSetting,
         builder: (context, state) => const NotificationSettingsView(),
       ),
+     GoRoute(
+  path: AppRoutes.notifications,
+  builder: (context, state) {
+    return BlocProvider(
+      create: (_) => getIt<NotificationCubit>()
+        ..getNotifications(),
+      child: const NotificationScreen(),
+    );
+  },
+),
 
-      // Location Details
+      // Location Details 
       GoRoute(
         path: AppRoutes.locationDetails,
         builder: (context, state) {
@@ -158,7 +169,7 @@ abstract class AppRouter {
 
       // Notification
       GoRoute(
-        path: AppRoutes.notification,
+        path: AppRoutes.notifications,
         builder: (context, state) => const NotificationScreen(),
       ),
 

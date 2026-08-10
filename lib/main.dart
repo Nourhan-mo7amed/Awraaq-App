@@ -1,19 +1,40 @@
 import 'package:awraq/core/service_lacoator.dart';
+import 'package:awraq/core/services/firebase_notification_service.dart';
 import 'package:awraq/features/localization/presentation/cubit/language_cubit.dart';
 import 'package:awraq/core/routing/app_router.dart';
 import 'package:awraq/core/theme/app_dark_theme.dart';
 import 'package:awraq/core/theme/app_light_theme.dart';
 import 'package:awraq/features/settings/presentation/cubit/theme_cubit.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(
+  RemoteMessage message,
+) async {
+  await Firebase.initializeApp();
 
+  print('Background notification received');
+  print('Title: ${message.notification?.title}');
+  print('Body: ${message.notification?.body}');
+  print('Data: ${message.data}');
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+
+  await FirebaseNotificationService.instance.initialize();
+
+  FirebaseMessaging.onBackgroundMessage(
+    firebaseMessagingBackgroundHandler,
+  );
 
   await setupServiceLocator();
 

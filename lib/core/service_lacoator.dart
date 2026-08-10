@@ -6,6 +6,9 @@ import 'package:awraq/features/governates/presentation/cubit/governorates_cubit.
 import 'package:awraq/features/home/data/repo/home_repo.dart';
 import 'package:awraq/features/home/data/repo_impl/home_repo_impl.dart';
 import 'package:awraq/features/home/presentation/cubit/home_cubit.dart';
+import 'package:awraq/features/notification/data/repo/notification_repo.dart';
+import 'package:awraq/features/notification/data/repo_impl/notification_repo_impl.dart';
+import 'package:awraq/features/notification/presentation/cubit/notification_cubit.dart';
 import 'package:awraq/features/profile/data/repo/profile_repository.dart';
 import 'package:awraq/features/profile/data/repo/profile_repository_impl.dart';
 import 'package:dio/dio.dart';
@@ -63,4 +66,24 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton<FlutterSecureStorage>(
     () => const FlutterSecureStorage(),
   );
+ // Notification Repository
+  // =========================
+
+  getIt.registerLazySingleton<NotificationRepo>(
+    () => NotificationRepoImpl(
+      api: getIt<ApiConsumer>(),
+    ),
+  );
+
+  // =========================
+  // Notification Cubit
+  // =========================
+
+  getIt.registerFactory<NotificationCubit>(
+    () => NotificationCubit(
+      repo: getIt<NotificationRepo>(),
+    ),
+  );
+
+
 }

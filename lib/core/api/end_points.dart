@@ -19,6 +19,7 @@ abstract class EndPoints {
 
   // Home
   static const String category = '/category';
+   static const String notifications = "/notifications";
 }
 // abstract class EndPoints {
 //   static String baseUrl =

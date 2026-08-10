@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "720004026558",
+    "project_id": "awraq-69686",
+    "storage_bucket": "awraq-69686.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:720004026558:android:0bd5108aced8e1cf9d8eef",
+        "android_client_info": {
+          "package_name": "com.example.awraq"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpdBCxMxJmUcUSR8sc_sdJi8Url_WRT6I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
