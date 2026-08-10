@@ -19,40 +19,25 @@ abstract class EndPoints {
 
   // Home
   static const String category = '/category';
+
+  // Location Details
+  static const String locationDetails = '/locations/';
+
+  // Procedure Details
+  static const String procedureDetails = '/procedures/';
    static const String notifications = "/notifications";
    static const String deviceTokens = '/device-tokens';
 }
+
 // abstract class EndPoints {
-//   static String baseUrl =
-// <<<<<<< HEAD
-//       'https://dinner-locks-potentially-contributions.trycloudflare.com/api';
-// =======
-//       'https://deemed-controls-hundreds-compatibility.trycloudflare.com/api';
-//   static const String profile = "/profile";
-//   static const String deleteAvatar = "/profile/avatar";
-//   static const String governorates = "/governorates";
-//   static const String category = "/category";
-// >>>>>>> feature/home
-//   static const String login = 'auth/login';
-//   static const String register = 'auth/register';
-//   static const String forgotPassword = 'auth/forgot-password';
-//   static const String verifyOtp = 'auth/verify-otp';
-//   static const String resetPassword = 'auth/reset-password';
-//   static const String logout = 'auth/logout';
-// <<<<<<< HEAD
-//   static const String profile = "/profile";
-//   static const String deleteAvatar = "/profile/avatar";
-//   static const String governorates = "/governorates";
+//   static String baseUrl = 'https://api.escuelajs.co/api/v1/';
+//   static String signUp = 'users/';
+//   static String login = 'auth/login';
+//   static const String refreshToken = 'auth/refresh-token';
+//   static const String categories = 'categories';
+//   static const String products = 'products';
 
-// =======
-// >>>>>>> feature/home
-// //   static String signUp = 'users/';
-// //   static String login = 'auth/login';
-// //   static const String refreshToken = 'auth/refresh-token';
-// //   static const String categories = 'categories';
-// //   static const String products = 'products';
-
-// // }
+// }
 
 // // class ApiKey {
 // //   static String status = 'statusCode';

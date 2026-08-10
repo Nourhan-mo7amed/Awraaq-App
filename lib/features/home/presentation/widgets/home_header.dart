@@ -27,10 +27,15 @@ class HomeHeader extends StatelessWidget {
         ),
         const Spacer(),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            context.push(AppRoutes.locationDetails);
+          },
           icon: const Icon(Icons.location_on_outlined, color: Colors.blue),
         ),
         IconButton(
+          onPressed: () {
+            context.push(AppRoutes.notification);
+          },
           onPressed: () =>context.push(AppRoutes.notifications),
           icon: const Icon(Icons.notifications_none_outlined, color: Colors.blue),
         ),

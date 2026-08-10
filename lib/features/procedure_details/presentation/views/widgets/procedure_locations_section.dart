@@ -1,8 +1,10 @@
+import 'package:awraq/core/routing/app_routes.dart';
 import 'package:awraq/core/theme/app_colors.dart';
 import 'package:awraq/core/theme/app_text_styles.dart';
 import 'package:awraq/features/procedure_details/data/models/procedure_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class ProcedureLocationsSection extends StatelessWidget {
@@ -75,74 +77,83 @@ class ProcedureLocationsSection extends StatelessWidget {
             separatorBuilder: (context, index) => SizedBox(width: 12.w),
             itemBuilder: (context, index) {
               final location = locationList[index];
-              return Container(
-                width: 130.w,
-                decoration: BoxDecoration(
-                  color: AppColors.lightSurface,
-                  borderRadius: BorderRadius.circular(14.r),
-                  border: Border.all(
-                    color: AppColors.lightBorder,
-                    width: 1.w,
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Top Image
-                    ClipRRect(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(13.r),
-                      ),
-                      child: Image.network(
-                        location.imageUrl,
-                        height: 85.h,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            height: 85.h,
-                            width: double.infinity,
-                            color: const Color(0xFF1B2E4B),
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    LucideIcons.building2,
-                                    color: AppColors.white,
-                                    size: 26.sp,
-                                  ),
-                                  SizedBox(height: 4.h),
-                                  Text(
-                                    'Civil Registry',
-                                    style: AppTextStyles.medium12.copyWith(
-                                      color: AppColors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
+              return GestureDetector(
+                onTap: () {
+                  final locationId = int.tryParse(location.id);
+                  context.push(
+                    AppRoutes.locationDetails,
+                    extra: locationId ?? location.id,
+                  );
+                },
+                child: Container(
+                  width: 130.w,
+                  decoration: BoxDecoration(
+                    color: AppColors.lightSurface,
+                    borderRadius: BorderRadius.circular(14.r),
+                    border: Border.all(
+                      color: AppColors.lightBorder,
+                      width: 1.w,
                     ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Top Image
+                      ClipRRect(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(13.r),
+                        ),
+                        child: Image.network(
+                          location.imageUrl,
+                          height: 85.h,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              height: 85.h,
+                              width: double.infinity,
+                              color: const Color(0xFF1B2E4B),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      LucideIcons.building2,
+                                      color: AppColors.white,
+                                      size: 26.sp,
+                                    ),
+                                    SizedBox(height: 4.h),
+                                    Text(
+                                      'Civil Registry',
+                                      style: AppTextStyles.medium12.copyWith(
+                                        color: AppColors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
 
-                    // Location Title
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.r),
-                        child: Text(
-                          location.title,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTextStyles.semiBold12.copyWith(
-                            color: AppColors.lightTextPrimary,
-                            height: 1.2,
+                      // Location Title
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.all(8.r),
+                          child: Text(
+                            location.title,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.semiBold12.copyWith(
+                              color: AppColors.lightTextPrimary,
+                              height: 1.2,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             },
@@ -152,3 +163,4 @@ class ProcedureLocationsSection extends StatelessWidget {
     );
   }
 }
+

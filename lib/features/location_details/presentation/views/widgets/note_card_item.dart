@@ -26,7 +26,7 @@ class _NoteCardItemState extends State<NoteCardItem> {
   void _showEditDialog() {
     final TextEditingController textController =
         TextEditingController(text: widget.note.noteText);
-    int selectedRating = widget.note.rating.round();
+    int selectedRating = widget.note.rating;
 
     showDialog(
       context: context,
@@ -604,7 +604,7 @@ class _NoteCardItemState extends State<NoteCardItem> {
                     Row(
                       children: List.generate(5, (index) {
                         return Icon(
-                          index < widget.note.rating.round()
+                          index < widget.note.rating
                               ? Icons.star_rounded
                               : Icons.star_outline_rounded,
                           color: AppColors.darkPrimary,
@@ -625,7 +625,9 @@ class _NoteCardItemState extends State<NoteCardItem> {
 
               // Time Ago
               Text(
-                widget.note.timeAgo,
+                widget.note.timeAgo.isNotEmpty
+                    ? widget.note.timeAgo
+                    : widget.note.createdAt,
                 style: AppTextStyles.regular14.copyWith(
                   color: AppColors.lightTextTertiary,
                 ),
