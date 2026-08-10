@@ -14,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
+//import 'package:hugeicons/hugeicons.dart';
 
 class LocationDetailsView extends StatelessWidget {
   final dynamic locationId;

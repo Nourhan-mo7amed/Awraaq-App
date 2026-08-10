@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:awraq/core/theme/app_colors.dart';
+
 abstract class AppTextStyles {
   static TextStyle bold28 = TextStyle(
     fontSize: 28.sp,
@@ -16,6 +18,7 @@ abstract class AppTextStyles {
     fontSize: 36.sp,
     fontWeight: FontWeight.w700,
   );
+
   static TextStyle semiBold12 = TextStyle(
     fontSize: 12.sp,
     fontWeight: FontWeight.w600,
@@ -42,6 +45,7 @@ abstract class AppTextStyles {
     fontWeight: FontWeight.w800,
     fontFamily: 'Montserrat',
   );
+
   static TextStyle semiBold14 = TextStyle(
     fontSize: 14.sp,
     fontWeight: FontWeight.w600,
@@ -52,6 +56,7 @@ abstract class AppTextStyles {
     fontSize: 12.sp,
     fontWeight: FontWeight.w400,
   );
+
   static TextStyle regular14 = TextStyle(
     fontSize: 14.sp,
     fontWeight: FontWeight.w400,
@@ -61,10 +66,12 @@ abstract class AppTextStyles {
     fontSize: 12.sp,
     fontWeight: FontWeight.w500,
   );
+
   static TextStyle medium15 = TextStyle(
     fontSize: 15.sp,
     fontWeight: FontWeight.w500,
   );
+
   static TextStyle medium18 = TextStyle(
     fontSize: 18.sp,
     fontWeight: FontWeight.w500,
@@ -73,5 +80,44 @@ abstract class AppTextStyles {
   static TextStyle semiBold20 = TextStyle(
     fontSize: 20.sp,
     fontWeight: FontWeight.w600,
+  );
+
+  static const welcome = TextStyle(
+    fontSize: 28,
+    fontWeight: FontWeight.w700,
+    color: AppColors.lightTextPrimary,
+  );
+
+  static const subtitle = TextStyle(
+    fontSize: 14,
+    color: Colors.grey,
+  );
+
+  static const label = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: AppColors.lightTextPrimary,
+  );
+
+  static const hint = TextStyle(
+    fontSize: 14,
+    color: AppColors.lightTextTertiary,
+  );
+
+  static const button = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+
+  static const smallBlue = TextStyle(
+    color: AppColors.lightPrimary,
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const error = TextStyle(
+    color: AppColors.error,
+    fontSize: 12,
   );
 }

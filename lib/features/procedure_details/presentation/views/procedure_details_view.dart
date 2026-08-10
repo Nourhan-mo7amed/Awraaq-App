@@ -1,43 +1,85 @@
+import 'package:awraq/core/routing/app_routes.dart';
+import 'package:awraq/core/service_lacoator.dart';
 import 'package:awraq/core/theme/app_colors.dart';
 import 'package:awraq/core/theme/app_text_styles.dart';
 import 'package:awraq/features/procedure_details/data/models/procedure_details_model.dart';
+import 'package:awraq/features/procedure_details/presentation/cubit/procedure_details_cubit.dart';
+import 'package:awraq/features/procedure_details/presentation/cubit/procedure_details_state.dart';
 import 'package:awraq/features/procedure_details/presentation/views/widgets/fees_and_charges_card.dart';
 import 'package:awraq/features/procedure_details/presentation/views/widgets/procedure_banner_card.dart';
 import 'package:awraq/features/procedure_details/presentation/views/widgets/procedure_quick_stats_row.dart';
 import 'package:awraq/features/procedure_details/presentation/views/widgets/procedure_locations_section.dart';
 import 'package:awraq/features/procedure_details/presentation/views/widgets/required_document_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-class ProcedureDetailsView extends StatefulWidget {
+class ProcedureDetailsView extends StatelessWidget {
+  final dynamic procedureId;
   final ProcedureDetailsModel? procedure;
 
   const ProcedureDetailsView({
     super.key,
+    this.procedureId,
     this.procedure,
   });
 
   @override
-  State<ProcedureDetailsView> createState() => _ProcedureDetailsViewState();
+  Widget build(BuildContext context) {
+    return BlocProvider<ProcedureDetailsCubit>(
+      create: (context) {
+        final cubit = getIt<ProcedureDetailsCubit>();
+        if (procedure != null) {
+          cubit.setProcedureDetails(procedure!);
+        } else {
+          cubit.getProcedureDetails(procedureId ?? 2);
+        }
+        return cubit;
+      },
+      child: ProcedureDetailsBody(
+        procedureId: procedureId ?? 2,
+        initialProcedure: procedure,
+      ),
+    );
+  }
 }
 
-class _ProcedureDetailsViewState extends State<ProcedureDetailsView> {
-  late ProcedureDetailsModel _procedureData;
+class ProcedureDetailsBody extends StatefulWidget {
+  final dynamic procedureId;
+  final ProcedureDetailsModel? initialProcedure;
+
+  const ProcedureDetailsBody({
+    super.key,
+    required this.procedureId,
+    this.initialProcedure,
+  });
+
+  @override
+  State<ProcedureDetailsBody> createState() => _ProcedureDetailsBodyState();
+}
+
+class _ProcedureDetailsBodyState extends State<ProcedureDetailsBody> {
+  ProcedureDetailsModel? _procedureData;
   late bool _isSaved;
 
   @override
   void initState() {
     super.initState();
-    _procedureData = widget.procedure ?? ProcedureDetailsModel.mockData;
-    _isSaved = _procedureData.isSaved;
+    if (widget.initialProcedure != null) {
+      _procedureData = widget.initialProcedure;
+      _isSaved = widget.initialProcedure!.isSaved;
+    } else {
+      _isSaved = false;
+    }
   }
 
   void _toggleSaveStatus() {
+    if (_procedureData == null) return;
     setState(() {
       _isSaved = !_isSaved;
-      _procedureData.isSaved = _isSaved;
+      _procedureData!.isSaved = _isSaved;
     });
 
     _showSuccessDialog(
@@ -188,60 +230,128 @@ class _ProcedureDetailsViewState extends State<ProcedureDetailsView> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 1. Top Banner Card
-            ProcedureBannerCard(
-              title: _procedureData.title,
-              description: _procedureData.description,
-            ),
-            SizedBox(height: 16.h),
+      body: BlocConsumer<ProcedureDetailsCubit, ProcedureDetailsState>(
+        listener: (context, state) {
+          if (state is ProcedureDetailsSuccess) {
+            setState(() {
+              _procedureData = state.procedureDetails;
+              _isSaved = state.procedureDetails.isSaved;
+            });
+          }
+        },
+        builder: (context, state) {
+          if (state is ProcedureDetailsLoading && _procedureData == null) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-            // 2. Procedure Quick Stats Row
-            ProcedureQuickStatsRow(procedure: _procedureData),
-            SizedBox(height: 20.h),
-
-            // 3. Required Documents Section
-            Text(
-              'Required Documents',
-              style: AppTextStyles.medium18.copyWith(
-                color: AppColors.lightTextPrimary,
+          if (state is ProcedureDetailsFailure && _procedureData == null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    state.error,
+                    style: AppTextStyles.regular14.copyWith(
+                      fontSize: 16.sp,
+                      color: AppColors.error,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 16.h),
+                  ElevatedButton(
+                    onPressed: () {
+                      context
+                          .read<ProcedureDetailsCubit>()
+                          .getProcedureDetails(widget.procedureId);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.lightPrimary,
+                    ),
+                    child: Text(
+                      'Retry',
+                      style: AppTextStyles.semiBold14.copyWith(
+                        color: AppColors.white,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            SizedBox(height: 12.h),
-            Column(
-              children: _procedureData.requiredDocuments.map((doc) {
-                return RequiredDocumentItem(document: doc);
-              }).toList(),
-            ),
-            SizedBox(height: 16.h),
+            );
+          }
 
-            // 4. Fees & Charges Section
-            Text(
-              'Fees & Charges',
-              style: AppTextStyles.medium18.copyWith(
-                color: AppColors.lightTextPrimary,
-              ),
-            ),
-            SizedBox(height: 12.h),
-            FeesAndChargesCard(fees: _procedureData.feesAndCharges),
-            SizedBox(height: 24.h),
+          final procedure = _procedureData ?? widget.initialProcedure ?? ProcedureDetailsModel.mockData;
 
-            // 5. Locations Section
-            ProcedureLocationsSection(
-              locations: _procedureData.safeLocations,
-              onViewOnMapPressed: () {
-                // Map view action
-              },
+          return SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 1. Top Banner Card
+                ProcedureBannerCard(
+                  title: procedure.title,
+                  description: procedure.description,
+                ),
+                SizedBox(height: 16.h),
+
+                // 2. Procedure Quick Stats Row
+                ProcedureQuickStatsRow(procedure: procedure),
+                SizedBox(height: 20.h),
+
+                // 3. Required Documents Section
+                Text(
+                  'Required Documents',
+                  style: AppTextStyles.medium18.copyWith(
+                    color: AppColors.lightTextPrimary,
+                  ),
+                ),
+                SizedBox(height: 12.h),
+                Column(
+                  children: procedure.requiredDocuments.map((doc) {
+                    return RequiredDocumentItem(document: doc);
+                  }).toList(),
+                ),
+                SizedBox(height: 16.h),
+
+                // 4. Fees & Charges Section
+                Text(
+                  'Fees & Charges',
+                  style: AppTextStyles.medium18.copyWith(
+                    color: AppColors.lightTextPrimary,
+                  ),
+                ),
+                SizedBox(height: 12.h),
+                FeesAndChargesCard(fees: procedure.feesAndCharges),
+                SizedBox(height: 24.h),
+
+                // 5. Locations Section
+                ProcedureLocationsSection(
+                  locations: procedure.safeLocations,
+                  onViewOnMapPressed: () {
+                    debugPrint('>>> View on Map pressed!');
+                    debugPrint('>>> safeLocations count: ${procedure.safeLocations.length}');
+                    if (procedure.safeLocations.isNotEmpty) {
+                      final rawId = procedure.safeLocations.first.id;
+                      final locationId = int.tryParse(rawId);
+                      debugPrint('>>> Navigating to location id: $rawId (parsed: $locationId)');
+                      context.push(
+                        AppRoutes.locationDetails,
+                        extra: locationId ?? rawId,
+                      );
+                    } else {
+                      debugPrint('>>> No locations available!');
+                    }
+                  },
+                ),
+                SizedBox(height: 24.h),
+              ],
             ),
-            SizedBox(height: 24.h),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 }
+

@@ -22,7 +22,11 @@ abstract class EndPoints {
 
   // Location Details
   static const String locationDetails = '/locations/';
+
+  // Procedure Details
+  static const String procedureDetails = '/procedures/';
 }
+
 // abstract class EndPoints {
 //   static String baseUrl = 'https://api.escuelajs.co/api/v1/';
 //   static String signUp = 'users/';
@@ -33,7 +37,7 @@ abstract class EndPoints {
 
 // }
 
-// class ApiKey {
-//   static String status = 'statusCode';
-//   static String errMsg = 'error';
+// // class ApiKey {
+// //   static String status = 'statusCode';
+// //   static String errMsg = 'error';
 // }

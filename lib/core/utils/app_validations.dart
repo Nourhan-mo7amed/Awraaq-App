@@ -1,66 +1,28 @@
-class AppValidators {
-  static String? validateEmail(final String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Please enter your email';
-    } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return 'Enter a valid email address';
+class AppValidator {
+  AppValidator._();
+
+  static String? email(String value) {
+    if (value.isEmpty) {
+      return "Email is required";
     }
+
+    final emailRegex =
+        RegExp(r'^[^@]+@[^@]+\.[^@]+');
+
+    if (!emailRegex.hasMatch(value)) {
+      return "Invalid email";
+    }
+
     return null;
   }
 
-  static String? validatePassword(final String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Please enter your password';
-    } else if (value.length < 3) {
-      return 'Password must be at least 6 characters';
-    }
-    return null;
-  }
-
-  static String? validateConfirmPassword(
-    final String? value,
-    final String password,
-  ) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Please confirm your password';
-    } else if (value != password) {
-      return 'Passwords do not match';
-    }
-    return null;
-  }
-
-  static String? validateName(final String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Please enter your name';
-    } else if (value.length < 3) {
-      return 'Name must be at least 3 characters';
-    }
-    return null;
-  }
-
-  static String? validatePhone(final String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Please enter your phone number';
-    } else if (!RegExp(r'^[0-9]{10,15}$').hasMatch(value)) {
-      return 'Enter a valid phone number';
-    }
-    return null;
-  }
-
-  static String? validStreet(final String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Please enter your Street Adress';
-    }
-    return null;
-  }
-
-  static String? validPostalCode(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Please enter your Postal Code';
+  static String? password(String value) {
+    if (value.isEmpty) {
+      return "Password is required";
     }
 
-    if (!RegExp(r'^[0-9]+$').hasMatch(value.trim())) {
-      return 'Postal Code must contain digits only';
+    if (value.length < 8) {
+      return "Password must be at least 8 characters";
     }
 
     return null;

@@ -6,11 +6,14 @@ import 'package:awraq/features/governates/presentation/cubit/governorates_cubit.
 import 'package:awraq/features/home/data/repo/home_repo.dart';
 import 'package:awraq/features/home/data/repo_impl/home_repo_impl.dart';
 import 'package:awraq/features/home/presentation/cubit/home_cubit.dart';
-import 'package:awraq/features/profile/data/repo/profile_repository.dart';
-import 'package:awraq/features/profile/data/repo/profile_repository_impl.dart';
 import 'package:awraq/features/location_details/data/repo/location_details_repo.dart';
 import 'package:awraq/features/location_details/data/repo_impl/location_details_repo_impl.dart';
 import 'package:awraq/features/location_details/presentation/cubit/location_details_cubit.dart';
+import 'package:awraq/features/procedure_details/data/repo/procedure_details_repo.dart';
+import 'package:awraq/features/procedure_details/data/repo_impl/procedure_details_repo_impl.dart';
+import 'package:awraq/features/procedure_details/presentation/cubit/procedure_details_cubit.dart';
+import 'package:awraq/features/profile/data/repo/profile_repository.dart';
+import 'package:awraq/features/profile/data/repo/profile_repository_impl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
@@ -18,6 +21,14 @@ import 'package:get_it/get_it.dart';
 final getIt = GetIt.instance;
 
 Future<void> setupServiceLocator() async {
+  // Allow re-registration on hot restart
+  getIt.allowReassignment = true;
+
+  /// Storage
+  getIt.registerLazySingleton<FlutterSecureStorage>(
+    () => const FlutterSecureStorage(),
+  );
+
   /// Dio
   getIt.registerLazySingleton<Dio>(
     () => Dio(),
@@ -31,13 +42,14 @@ Future<void> setupServiceLocator() async {
     ),
   );
 
-  /// Repository
+  /// Profile Repository
   getIt.registerLazySingleton<ProfileRepo>(
     () => ProfileRepoImpl(
       api: getIt<ApiConsumer>(),
     ),
   );
 
+  /// Governorates
   getIt.registerLazySingleton<GovernoratesRepo>(
     () => GovernoratesRepoImpl(
       api: getIt<ApiConsumer>(),
@@ -78,7 +90,19 @@ Future<void> setupServiceLocator() async {
     ),
   );
 
-  getIt.registerLazySingleton<FlutterSecureStorage>(
-    () => const FlutterSecureStorage(),
+  /// Procedure Details Repository
+  getIt.registerLazySingleton<ProcedureDetailsRepo>(
+    () => ProcedureDetailsRepoImpl(
+      api: getIt<ApiConsumer>(),
+    ),
+  );
+
+  /// Procedure Details Cubit
+  getIt.registerFactory<ProcedureDetailsCubit>(
+    () => ProcedureDetailsCubit(
+      getIt<ProcedureDetailsRepo>(),
+    ),
   );
 }
+
+

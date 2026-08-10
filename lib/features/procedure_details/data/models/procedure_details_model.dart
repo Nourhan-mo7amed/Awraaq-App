@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class ProcedureDetailsModel {
   final String id;
   final String title;
@@ -29,6 +31,71 @@ class ProcedureDetailsModel {
     required this.feesAndCharges,
     this.locations,
   });
+
+  factory ProcedureDetailsModel.fromJson(Map<String, dynamic> json) {
+    final rawDocs = json['required_documents'];
+    List<RequiredDocumentModel> parsedDocs = [];
+
+    if (rawDocs is List) {
+      parsedDocs = rawDocs.map((e) {
+        if (e is Map<String, dynamic>) {
+          return RequiredDocumentModel.fromJson(e);
+        }
+        return RequiredDocumentModel(
+          id: UniqueKey().toString(),
+          title: e.toString(),
+          description: 'Required document',
+        );
+      }).toList();
+    } else if (rawDocs is String && rawDocs.trim().isNotEmpty) {
+      parsedDocs = [
+        RequiredDocumentModel(
+          id: '1',
+          title: rawDocs,
+          description: 'Required document for this procedure',
+        )
+      ];
+    }
+
+    final rawLocations = json['locations'] as List<dynamic>?;
+    List<ProcedureLocationModel> parsedLocations = [];
+    if (rawLocations != null && rawLocations.isNotEmpty) {
+      parsedLocations = rawLocations.map((e) {
+        if (e is Map<String, dynamic>) {
+          return ProcedureLocationModel.fromJson(e);
+        }
+        return ProcedureLocationModel(
+          id: '0',
+          title: 'Unknown Location',
+          imageUrl: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=400',
+        );
+      }).toList();
+    }
+
+    final feeStr = json['fees']?.toString() ?? json['officialFee']?.toString() ?? '0.00';
+    final feeAmount = double.tryParse(feeStr) != null ? 'EGP $feeStr' : feeStr;
+
+    final feesList = [
+      FeeChargeModel(
+        title: 'Official Procedure Fee',
+        amount: feeAmount,
+      )
+    ];
+
+    return ProcedureDetailsModel(
+      id: json['id']?.toString() ?? '',
+      title: json['name']?.toString() ?? json['title']?.toString() ?? '',
+      description: json['description']?.toString() ?? '',
+      isSaved: json['is_saved'] as bool? ?? json['isSaved'] as bool? ?? false,
+      requiredDocsCount: parsedDocs.length,
+      officialFee: feeAmount,
+      nearbyLocationsCount: parsedLocations.length,
+      aiTipsCount: (json['ai_tips_count'] as num?)?.toInt() ?? 2,
+      requiredDocuments: parsedDocs,
+      feesAndCharges: feesList,
+      locations: parsedLocations,
+    );
+  }
 
   static ProcedureDetailsModel get mockData => ProcedureDetailsModel(
         id: 'passport_renewal',
@@ -93,6 +160,14 @@ class RequiredDocumentModel {
     required this.title,
     required this.description,
   });
+
+  factory RequiredDocumentModel.fromJson(Map<String, dynamic> json) {
+    return RequiredDocumentModel(
+      id: json['id']?.toString() ?? '',
+      title: json['title']?.toString() ?? json['name']?.toString() ?? '',
+      description: json['description']?.toString() ?? '',
+    );
+  }
 }
 
 class FeeChargeModel {
@@ -103,6 +178,13 @@ class FeeChargeModel {
     required this.title,
     required this.amount,
   });
+
+  factory FeeChargeModel.fromJson(Map<String, dynamic> json) {
+    return FeeChargeModel(
+      title: json['title']?.toString() ?? json['name']?.toString() ?? '',
+      amount: json['amount']?.toString() ?? json['fee']?.toString() ?? '',
+    );
+  }
 }
 
 class ProcedureLocationModel {
@@ -115,6 +197,16 @@ class ProcedureLocationModel {
     required this.title,
     required this.imageUrl,
   });
+
+  factory ProcedureLocationModel.fromJson(Map<String, dynamic> json) {
+    return ProcedureLocationModel(
+      id: json['id']?.toString() ?? '',
+      title: json['name']?.toString() ?? json['title']?.toString() ?? '',
+      imageUrl: json['image_url']?.toString() ??
+          json['imageUrl']?.toString() ??
+          'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=400',
+    );
+  }
 
   static List<ProcedureLocationModel> get defaultLocations => [
         ProcedureLocationModel(
@@ -137,3 +229,4 @@ class ProcedureLocationModel {
         ),
       ];
 }
+
