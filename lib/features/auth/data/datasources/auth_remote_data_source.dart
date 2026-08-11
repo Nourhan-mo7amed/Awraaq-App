@@ -43,12 +43,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String email,
     required String password,
   }) async {
+    final formData = FormData.fromMap({
+      'email': email,
+      'password': password,
+    });
+
     final response = await dio.post(
       EndPoints.login,
-      data: {
-        'email': email,
-        'password': password,
-      },
+      data: formData,
     );
 
     return AuthResponse.fromJson(_asMap(response.data));
@@ -84,11 +86,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<AuthResponse> sendForgotPasswordOtp({
     required String email,
   }) async {
+    final formData = FormData.fromMap({
+      'email': email,
+    });
+
     final response = await dio.post(
       EndPoints.forgotPassword,
-      data: {
-        'email': email,
-      },
+      data: formData,
     );
 
     return AuthResponse.fromJson(_asMap(response.data));
@@ -98,11 +102,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<AuthResponse> verifyOtp({
     required String otp,
   }) async {
+    final formData = FormData.fromMap({
+      'otp': otp,
+    });
+
     final response = await dio.post(
       EndPoints.verifyOtp,
-      data: {
-        'otp': otp,
-      },
+      data: formData,
     );
 
     return AuthResponse.fromJson(_asMap(response.data));
@@ -113,12 +119,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String password,
     required String confirmPassword,
   }) async {
+    final formData = FormData.fromMap({
+      'password': password,
+      'confirm_password': confirmPassword,
+      'password_confirmation': confirmPassword,
+    });
+
     final response = await dio.post(
       EndPoints.resetPassword,
-      data: {
-        'password': password,
-        'confirm_password': confirmPassword,
-      },
+      data: formData,
     );
 
     return AuthResponse.fromJson(_asMap(response.data));

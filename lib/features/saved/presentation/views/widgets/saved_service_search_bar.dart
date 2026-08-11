@@ -2,7 +2,7 @@ import 'package:awraq/core/theme/app_colors.dart';
 import 'package:awraq/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hugeicons/hugeicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class SavedServiceSearchBar extends StatelessWidget {
   final TextEditingController controller;
@@ -38,8 +38,8 @@ class SavedServiceSearchBar extends StatelessWidget {
           ),
           prefixIcon: Padding(
             padding: EdgeInsets.symmetric(horizontal: 12.w),
-            child: HugeIcon(
-              icon: HugeIcons.strokeRoundedSearch01,
+            child: Icon(
+              LucideIcons.search,
               color: AppColors.lightTextSecondary,
               size: 20.sp,
             ),

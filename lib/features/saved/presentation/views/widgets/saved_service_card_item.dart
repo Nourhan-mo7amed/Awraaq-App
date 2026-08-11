@@ -3,7 +3,7 @@ import 'package:awraq/core/theme/app_text_styles.dart';
 import 'package:awraq/features/saved/data/models/saved_service_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hugeicons/hugeicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class SavedServiceCardItem extends StatelessWidget {
   final SavedServiceModel service;
@@ -48,8 +48,8 @@ class SavedServiceCardItem extends StatelessWidget {
               SizedBox(width: 8.w),
               GestureDetector(
                 onTap: onDelete,
-                child: HugeIcon(
-                  icon: HugeIcons.strokeRoundedDelete02,
+                child: Icon(
+                  LucideIcons.trash2,
                   color: AppColors.error,
                   size: 20.sp,
                 ),
@@ -122,8 +122,8 @@ class SavedServiceCardItem extends StatelessWidget {
                         ],
                       ),
                       SizedBox(width: 8.w),
-                      HugeIcon(
-                        icon: HugeIcons.strokeRoundedArrowRight02,
+                      Icon(
+                        LucideIcons.arrowRight,
                         color: AppColors.white,
                         size: 16.sp,
                       ),

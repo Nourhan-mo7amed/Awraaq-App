@@ -1,3 +1,5 @@
+import 'package:awraq/core/theme/app_colors.dart';
+import 'package:awraq/core/theme/app_text_styles.dart';
 import 'package:awraq/features/home/presentation/cubit/home_cubit.dart';
 import 'package:awraq/features/home/presentation/cubit/home_state.dart';
 import 'package:awraq/features/home/presentation/widgets/category_list.dart';
@@ -8,6 +10,7 @@ import 'package:awraq/features/home/presentation/widgets/tip_of_the_day_card.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class HomeBody extends StatelessWidget {
   const HomeBody({super.key});
@@ -18,18 +21,60 @@ class HomeBody extends StatelessWidget {
       builder: (context, state) {
         final cubit = context.read<HomeCubit>();
 
+        /// Loading state
         if (state is HomeLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Center(
+            child: CircularProgressIndicator(
+              color: AppColors.lightPrimary,
+            ),
           );
         }
 
+        /// Error state
         if (state is HomeFailure) {
           return Center(
-            child: Text(state.error),
+            child: Padding(
+              padding: EdgeInsets.all(24.r),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    LucideIcons.alertTriangle,
+                    size: 48.sp,
+                    color: AppColors.warning,
+                  ),
+                  SizedBox(height: 14.h),
+                  Text(
+                    state.error,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.medium15.copyWith(
+                      color: AppColors.lightTextSecondary,
+                    ),
+                  ),
+                  SizedBox(height: 18.h),
+                  ElevatedButton.icon(
+                    onPressed: () => cubit.getHomeData(),
+                    icon: const Icon(LucideIcons.refreshCw, size: 18),
+                    label: const Text('إعادة المحاولة'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.lightPrimary,
+                      foregroundColor: AppColors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 24.w,
+                        vertical: 12.h,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           );
         }
 
+        /// Success state
         if (state is HomeSuccess) {
           return SingleChildScrollView(
             padding: EdgeInsets.symmetric(
@@ -37,24 +82,29 @@ class HomeBody extends StatelessWidget {
               vertical: 12.h,
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                /// Header (Avatar + Name + Icons)
                 const HomeHeader(),
 
-                SizedBox(height: 16.h),
+                SizedBox(height: 18.h),
 
+                /// Tip of the Day
                 const TipOfTheDayCard(),
 
-                SizedBox(height: 16.h),
+                SizedBox(height: 18.h),
 
+                /// Services / Locations Switch
                 ServicesLocationsSwitch(
                   isServicesSelected: true,
                   onChanged: (value) {
-                    // بعدين لما تعملي Locations
+                    // TODO: implement locations view
                   },
                 ),
 
-                SizedBox(height: 16.h),
+                SizedBox(height: 18.h),
 
+                /// Category Filter Chips
                 CategoryList(
                   categories: state.categories,
                   selectedCategoryId: state.selectedCategoryId,
@@ -63,11 +113,14 @@ class HomeBody extends StatelessWidget {
                   },
                 ),
 
-                SizedBox(height: 16.h),
+                SizedBox(height: 18.h),
 
+                /// Services Grid
                 ServicesGrid(
                   services: state.services,
                 ),
+
+                SizedBox(height: 16.h),
               ],
             ),
           );
@@ -78,44 +131,3 @@ class HomeBody extends StatelessWidget {
     );
   }
 }
-//  import 'package:awraq/features/home/presentation/widgets/home_header.dart';
-// import 'package:awraq/features/home/presentation/widgets/services_grid.dart';
-// import 'package:awraq/features/home/presentation/widgets/services_locations_switch.dart';
-// import 'package:awraq/features/home/presentation/widgets/tip_of_the_day_card.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-
-
-// class HomeBody extends StatelessWidget {
-//   const HomeBody({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-  
-//           return SingleChildScrollView(
-//             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-//             child: Column(
-//               children: [
-//                 const HomeHeader(),
-//                 const SizedBox(height: 16),
-//                 const TipOfTheDayCard(), // استبدال مربع البحث
-//                 const SizedBox(height: 16),
-//                 ServicesLocationsSwitch(
-//                   isServicesSelected: state.isServicesSelected,
-//                   onChanged: (val) => cubit.toggleServicesLocations(val),
-//                 ),
-//                 const SizedBox(height: 16),
-//                 CategoryList(
-//                   categories:
-//                   selectedIndex: state.selectedCategoryIndex,
-//                   onCategorySelected: (index) => cubit.selectCategory(index),
-//                 ),
-//                 const SizedBox(height: 16),
-//                 ServicesGrid(services: state.services),
-//               ],
-//             ),
-//           );
-//         }
-       
-    
-//   }

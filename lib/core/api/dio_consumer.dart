@@ -50,8 +50,8 @@ class DioConsumer implements ApiConsumer {
       );
 
       return response.data;
-    } on DioException catch (e) {
-      //throw ServerException.handleDioError(e);
+    } on DioException {
+      rethrow;
     }
   }
 
@@ -69,8 +69,8 @@ class DioConsumer implements ApiConsumer {
       );
 
       return response.data;
-    } on DioException catch (e) {
-      //throw ServerException.handleDioError(e);
+    } on DioException {
+      rethrow;
     }
   }
 
@@ -89,8 +89,8 @@ class DioConsumer implements ApiConsumer {
       );
 
       return response.data;
-    } on DioException catch (e) {
-      // throw ServerException.handleDioError(e);
+    } on DioException {
+      rethrow;
     }
   }
 
@@ -109,8 +109,8 @@ class DioConsumer implements ApiConsumer {
       );
 
       return response.data;
-    } on DioException catch (e) {
-      // throw ServerException.handleDioError(e);
+    } on DioException {
+      rethrow;
     }
   }
 }

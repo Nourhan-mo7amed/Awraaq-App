@@ -1,4 +1,8 @@
+import 'package:awraq/core/theme/app_colors.dart';
+import 'package:awraq/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class ServicesLocationsSwitch extends StatelessWidget {
   final bool isServicesSelected;
@@ -14,72 +18,90 @@ class ServicesLocationsSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        /// Services button
         Expanded(
-          child: GestureDetector(
+          child: _SwitchButton(
+            label: 'Services',
+            icon: LucideIcons.layoutGrid,
+            isSelected: isServicesSelected,
             onTap: () => onChanged(true),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              decoration: BoxDecoration(
-                color: isServicesSelected ? Colors.blue : Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: isServicesSelected ? Colors.blue : Colors.grey.shade300,
-                ),
-              ),
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.subtitles_outlined,
-                    color: isServicesSelected ? Colors.white : Colors.grey,
-                    size: 28,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Services',
-                    style: TextStyle(
-                      color: isServicesSelected ? Colors.white : Colors.grey,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ),
         ),
-        const SizedBox(width: 16),
+        SizedBox(width: 14.w),
+
+        /// Locations button
         Expanded(
-          child: GestureDetector(
+          child: _SwitchButton(
+            label: 'Locations',
+            icon: LucideIcons.mapPin,
+            isSelected: !isServicesSelected,
             onTap: () => onChanged(false),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              decoration: BoxDecoration(
-                color: !isServicesSelected ? Colors.blue : Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: !isServicesSelected ? Colors.blue : Colors.grey.shade300,
-                ),
-              ),
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.map_outlined, // أيقونة الخريطة الجديدة
-                    color: !isServicesSelected ? Colors.white : Colors.grey,
-                    size: 28,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Locations',
-                    style: TextStyle(
-                      color: !isServicesSelected ? Colors.white : Colors.grey,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _SwitchButton extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _SwitchButton({
+    required this.label,
+    required this.icon,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInOut,
+        padding: EdgeInsets.symmetric(vertical: 18.h),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.lightPrimary : AppColors.lightSurface,
+          borderRadius: BorderRadius.circular(14.r),
+          border: Border.all(
+            color: isSelected
+                ? AppColors.lightPrimary
+                : AppColors.lightBorder,
+            width: 1.2,
+          ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: AppColors.lightPrimary.withValues(alpha: 0.25),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : [],
+        ),
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? AppColors.white : AppColors.lightTextTertiary,
+              size: 26.sp,
+            ),
+            SizedBox(height: 8.h),
+            Text(
+              label,
+              style: AppTextStyles.semiBold14.copyWith(
+                color: isSelected
+                    ? AppColors.white
+                    : AppColors.lightTextSecondary,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

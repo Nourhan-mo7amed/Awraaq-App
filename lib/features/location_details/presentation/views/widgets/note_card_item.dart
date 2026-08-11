@@ -3,7 +3,7 @@ import 'package:awraq/core/theme/app_text_styles.dart';
 import 'package:awraq/features/location_details/data/models/location_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hugeicons/hugeicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 enum NoteMenuAction { edit, delete, report }
 
@@ -652,8 +652,8 @@ class _NoteCardItemState extends State<NoteCardItem> {
                 elevation: 4,
                 constraints: const BoxConstraints(),
                 padding: EdgeInsets.zero,
-                icon: HugeIcon(
-                  icon: HugeIcons.strokeRoundedMoreHorizontal,
+                icon: Icon(
+                  LucideIcons.ellipsis,
                   color: AppColors.darkSurface,
                   size: 20.sp,
                 ),
@@ -664,8 +664,8 @@ class _NoteCardItemState extends State<NoteCardItem> {
                     value: NoteMenuAction.edit,
                     child: Row(
                       children: [
-                        HugeIcon(
-                          icon: HugeIcons.strokeRoundedEdit02,
+                        Icon(
+                          LucideIcons.pencil,
                           color: AppColors.lightTextPrimary,
                           size: 18.sp,
                         ),
@@ -684,8 +684,8 @@ class _NoteCardItemState extends State<NoteCardItem> {
                     value: NoteMenuAction.delete,
                     child: Row(
                       children: [
-                        HugeIcon(
-                          icon: HugeIcons.strokeRoundedDelete02,
+                        Icon(
+                          LucideIcons.trash2,
                           color: AppColors.error,
                           size: 18.sp,
                         ),
@@ -704,8 +704,8 @@ class _NoteCardItemState extends State<NoteCardItem> {
                     value: NoteMenuAction.report,
                     child: Row(
                       children: [
-                        HugeIcon(
-                          icon: HugeIcons.strokeRoundedAlertCircle,
+                        Icon(
+                          LucideIcons.alertCircle,
                           color: AppColors.warning,
                           size: 18.sp,
                         ),

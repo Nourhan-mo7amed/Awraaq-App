@@ -66,7 +66,7 @@ import 'package:go_router/go_router.dart';
 
 abstract class AppRouter {
   static final router = GoRouter(
-    initialLocation: AppRoutes.login,
+    initialLocation: AppRoutes.kSplash,
     routes: [
       // =========================
       // Splash
@@ -163,13 +163,9 @@ abstract class AppRouter {
             );
           }
 
-          if (extra is int) {
-            return LocationDetailsView(
-             // locationId: extra,
-            );
-          }
-
-          return const LocationDetailsView();
+          return LocationDetailsView(
+            locationId: extra,
+          );
         },
       ),
 

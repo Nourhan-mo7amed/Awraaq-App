@@ -1,27 +1,27 @@
 abstract class EndPoints {
   static String baseUrl =
-      'https://signs-micro-arabic-roles.trycloudflare.com/api';
+      'https://signs-micro-arabic-roles.trycloudflare.com/api/';
 
   // Profile
-  static const String profile = '/profile';
-  static const String deleteAvatar = '/profile/avatar';
+  static const String profile = 'profile';
+  static const String deleteAvatar = 'profile/avatar';
 
   // Governorates
-  static const String governorates = '/governorates';
+  static const String governorates = 'governorates';
 
   // Home
-  static const String category = '/category';
+  static const String category = 'category';
 
   // Location Details
-  static const String locationDetails = '/locations/';
+  static const String locationDetails = 'locations/';
 
   // Procedure Details
-  static const String procedureDetails = '/procedures/';
+  static const String procedureDetails = 'procedures/';
 
   // Notifications
-  static const String notifications = '/notifications';
-  static const String deviceTokens = '/device-tokens';
-   static const String login = 'login';
+  static const String notifications = 'notifications';
+  static const String deviceTokens = 'device-tokens';
+  static const String login = 'login';
   static const String register = 'register';
   static const String forgotPassword = 'forgot-password';
   static const String verifyOtp = 'verify-otp';
