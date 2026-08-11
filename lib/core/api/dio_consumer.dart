@@ -1,4 +1,3 @@
-// import 'package:awraq/core/api/api_consumer.dart';
 import 'package:awraq/core/api/api_consumer.dart';
 import 'package:awraq/core/api/end_points.dart';
 import 'package:dio/dio.dart';
@@ -6,109 +5,112 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class DioConsumer implements ApiConsumer {
   final Dio dio;
-  final FlutterSecureStorage storage;
 
-  DioConsumer({
-    required this.dio,
-    required this.storage,
-  }) {
+  DioConsumer({required this.dio}) {
     dio.options.baseUrl = EndPoints.baseUrl;
 
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          final token = await storage.read(key: "access_token");
-          print("TOKEN => $token");
-          if (token != null && token.isNotEmpty) {
-            options.headers["Authorization"] = "Bearer $token";
-          }
-          print("HEADERS => ${options.headers}");
-          options.headers["Accept"] = "application/json";
-          options.headers["Content-Type"] = "application/json";
-
+          try {
+            const storage = FlutterSecureStorage();
+            final token = await storage.read(key: 'access_token');
+            if (token != null && token.isNotEmpty) {
+              options.headers['Authorization'] = 'Bearer $token';
+            }
+          } catch (_) {}
           handler.next(options);
-        },
-        onError: (error, handler) {
-          if (error.response?.statusCode == 401) {
-            print("Unauthorized");
-          }
-          handler.next(error);
         },
       ),
     );
 
     dio.interceptors.add(
       LogInterceptor(
-        request: true,
-        requestHeader: true,
         requestBody: true,
-        responseHeader: true,
+        requestHeader: true,
         responseBody: true,
+        responseHeader: true,
         error: true,
       ),
     );
   }
 
   @override
-  Future delete({
+  Future<dynamic> delete({
     required String path,
     dynamic data,
     Map<String, dynamic>? queryParameters,
     bool isFormData = false,
   }) async {
-    final response = await dio.delete(
-      path,
-      data: isFormData ? FormData.fromMap(data) : data,
-      queryParameters: queryParameters,
-    );
+    try {
+      final response = await dio.delete(
+        path,
+        data: isFormData ? FormData.fromMap(data) : data,
+        queryParameters: queryParameters,
+      );
 
-    return response.data;
+      return response.data;
+    } on DioException catch (e) {
+      //throw ServerException.handleDioError(e);
+    }
   }
 
   @override
-  Future get({
+  Future<dynamic> get({
     required String path,
     Object? data,
     Map<String, dynamic>? queryParameters,
   }) async {
-    final response = await dio.get(
-      path,
-      data: data,
-      queryParameters: queryParameters,
-    );
+    try {
+      final response = await dio.get(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+      );
 
-    return response.data;
+      return response.data;
+    } on DioException catch (e) {
+      //throw ServerException.handleDioError(e);
+    }
   }
 
   @override
-  Future patch({
+  Future<dynamic> patch({
     required String path,
     dynamic data,
     Map<String, dynamic>? queryParameters,
     bool isFormData = false,
   }) async {
-    final response = await dio.patch(
-      path,
-      data: isFormData ? FormData.fromMap(data) : data,
-      queryParameters: queryParameters,
-    );
+    try {
+      final response = await dio.patch(
+        path,
+        data: isFormData ? FormData.fromMap(data) : data,
+        queryParameters: queryParameters,
+      );
 
-    return response.data;
+      return response.data;
+    } on DioException catch (e) {
+      // throw ServerException.handleDioError(e);
+    }
   }
 
   @override
-  Future post({
+  Future<dynamic> post({
     required String path,
     dynamic data,
     Map<String, dynamic>? queryParameters,
     bool isFormData = false,
   }) async {
-    final response = await dio.post(
-      path,
-      data: isFormData ? FormData.fromMap(data) : data,
-      queryParameters: queryParameters,
-    );
+    try {
+      final response = await dio.post(
+        path,
+        data: isFormData ? FormData.fromMap(data) : data,
+        queryParameters: queryParameters,
+      );
 
-    return response.data;
+      return response.data;
+    } on DioException catch (e) {
+      // throw ServerException.handleDioError(e);
+    }
   }
 }

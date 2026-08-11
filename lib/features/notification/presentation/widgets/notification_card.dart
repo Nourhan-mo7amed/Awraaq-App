@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../data/models/notification_model.dart';
+import '../models/notification_model.dart';
 import 'notification_icon.dart';
 
 class NotificationCard extends StatelessWidget {
@@ -40,37 +40,49 @@ class NotificationCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ======================================================
-            // ICON
-            // ======================================================
-
+            /// Icon
             NotificationIcon(
-              type: notification.type,
+              icon: notification.icon,
             ),
 
             SizedBox(width: 12.w),
 
-            // ======================================================
-            // TITLE + MESSAGE
-            // ======================================================
-
+            /// Text
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    notification.title,
-                    style: TextStyle(
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
-                    ),
+                  /// Title + Time
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          notification.title,
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(width: 8.w),
+
+                      Text(
+                        notification.time,
+                        style: TextStyle(
+                          fontSize: 11.sp,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
                   ),
 
                   SizedBox(height: 6.h),
 
+                  /// Description
                   Text(
-                    notification.message,
+                    notification.description,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -83,19 +95,17 @@ class NotificationCard extends StatelessWidget {
               ),
             ),
 
-            SizedBox(width: 8.w),
-
-            // ======================================================
-            // UNREAD DOT
-            // ======================================================
-
+            /// Unread Dot
             if (!notification.isRead)
-              Container(
-                width: 8.w,
-                height: 8.h,
-                decoration: const BoxDecoration(
-                  color: Color(0xff4A90FF),
-                  shape: BoxShape.circle,
+              Padding(
+                padding: EdgeInsets.only(left: 8.w),
+                child: Container(
+                  width: 8.w,
+                  height: 8.h,
+                  decoration: const BoxDecoration(
+                    color: Color(0xff4A90FF),
+                    shape: BoxShape.circle,
+                  ),
                 ),
               ),
           ],

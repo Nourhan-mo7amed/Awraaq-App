@@ -16,13 +16,10 @@ import 'package:awraq/features/edit_profile/presentation/views/edit_profile_view
 // Governorates
 import 'package:awraq/features/governates/data/repo/governorates_repo.dart';
 import 'package:awraq/features/governates/presentation/cubit/governorates_cubit.dart';
+import 'package:awraq/features/home/presentation/cubit/home_cubit.dart';
+import 'package:awraq/features/layout/cubit/layout_cubit/layout_cubit.dart';
 
 // Home
-import 'package:awraq/features/home/presentation/cubit/home_cubit.dart';
-import 'package:awraq/features/home/presentation/view/home_view.dart';
-
-// Layout
-import 'package:awraq/features/layout/cubit/layout_cubit/layout_cubit.dart';
 import 'package:awraq/features/layout/presentation/views/bottom_nav_view.dart';
 
 // Localization
@@ -31,9 +28,9 @@ import 'package:awraq/features/localization/presentation/views/localization_view
 // Location Details
 import 'package:awraq/features/location_details/data/models/location_details_model.dart';
 import 'package:awraq/features/location_details/presentation/views/location_details_view.dart';
-import 'package:awraq/features/notification/presentation/cubit/notification_cubit.dart';
 
 // Notification
+import 'package:awraq/features/notification/presentation/cubit/notification_cubit.dart';
 import 'package:awraq/features/notification/presentation/views/notification_screen.dart';
 
 // Notification Settings
@@ -59,6 +56,7 @@ import 'package:awraq/features/search/presentation/views/search_view.dart';
 
 // Settings
 import 'package:awraq/features/settings/presentation/views/theme_view.dart';
+import 'package:awraq/features/splash/presentation/view/home_view.dart';
 
 // Splash
 import 'package:awraq/features/splash/presentation/view/splash_view.dart';
@@ -70,19 +68,25 @@ abstract class AppRouter {
   static final router = GoRouter(
     initialLocation: AppRoutes.login,
     routes: [
+      // =========================
       // Splash
+      // =========================
       GoRoute(
         path: AppRoutes.kSplash,
         builder: (context, state) => const SplashView(),
       ),
 
+      // =========================
       // Onboarding
+      // =========================
       GoRoute(
         path: AppRoutes.onboarding,
         builder: (context, state) => const OnboardingView(),
       ),
 
+      // =========================
       // Auth
+      // =========================
       GoRoute(
         path: AppRoutes.login,
         builder: (context, state) => const LoginScreen(),
@@ -113,7 +117,9 @@ abstract class AppRouter {
         builder: (context, state) => const SuccessScreen(),
       ),
 
+      // =========================
       // Settings
+      // =========================
       GoRoute(
         path: AppRoutes.theme,
         builder: (context, state) => const ThemeView(),
@@ -128,53 +134,72 @@ abstract class AppRouter {
         path: AppRoutes.notificationSetting,
         builder: (context, state) => const NotificationSettingsView(),
       ),
-     GoRoute(
-  path: AppRoutes.notifications,
-  builder: (context, state) {
-    return BlocProvider(
-      create: (_) => getIt<NotificationCubit>()
-        ..getNotifications(),
-      child: const NotificationScreen(),
-    );
-  },
-),
 
-      // Location Details 
+      // =========================
+      // Notifications
+      // =========================
+      GoRoute(
+        path: AppRoutes.notifications,
+        builder: (context, state) {
+          return BlocProvider(
+            create: (_) => getIt<NotificationCubit>()
+              ..getNotifications(),
+            child: const NotificationScreen(),
+          );
+        },
+      ),
+
+      // =========================
+      // Location Details
+      // =========================
       GoRoute(
         path: AppRoutes.locationDetails,
         builder: (context, state) {
           final extra = state.extra;
+
           if (extra is LocationDetailsModel) {
-            return LocationDetailsView(location: extra);
-          } else if (extra is int) {
-            return LocationDetailsView(locationId: extra);
+            return LocationDetailsView(
+              location: extra,
+            );
           }
+
+          if (extra is int) {
+            return LocationDetailsView(
+             // locationId: extra,
+            );
+          }
+
           return const LocationDetailsView();
         },
       ),
 
+      // =========================
       // Procedure Details
+      // =========================
       GoRoute(
         path: AppRoutes.procedureDetails,
         builder: (context, state) {
           final extra = state.extra;
+
           if (extra is ProcedureDetailsModel) {
-            return ProcedureDetailsView(procedure: extra);
-          } else if (extra is int) {
-            return ProcedureDetailsView(procedureId: extra);
+            return ProcedureDetailsView(
+              procedure: extra,
+            );
           }
-          // Default: let the view fetch with default id
+
+          if (extra is int) {
+            return ProcedureDetailsView(
+              procedureId: extra,
+            );
+          }
+
           return const ProcedureDetailsView();
         },
       ),
 
-      // Notification
-      GoRoute(
-        path: AppRoutes.notifications,
-        builder: (context, state) => const NotificationScreen(),
-      ),
-
-      // Bottom Navigation
+      // =========================
+      // Bottom Navigation Layout
+      // =========================
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return MultiBlocProvider(
@@ -190,7 +215,9 @@ abstract class AppRouter {
           );
         },
         branches: [
+          // =========================
           // Home
+          // =========================
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -200,7 +227,9 @@ abstract class AppRouter {
             ],
           ),
 
+          // =========================
           // Search
+          // =========================
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -210,7 +239,9 @@ abstract class AppRouter {
             ],
           ),
 
+          // =========================
           // Saved
+          // =========================
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -219,65 +250,66 @@ abstract class AppRouter {
               ),
             ],
           ),
-
-          // AI Chat
-          // StatefulShellBranch(
-          //   routes: [
-          //     GoRoute(
-          //       path: AppRoutes.aiChat,
-          //       builder: (context, state) =>
-          //           const DummyScreen(title: 'AI Chat'),
-          //     ),
-          //   ],
-          // ),
         ],
       ),
 
+      // =========================
       // Edit Profile
+      // =========================
       GoRoute(
         path: AppRoutes.editProfile,
-        builder: (context, state) => MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (_) => GovernoratesCubit(
-                repo: getIt<GovernoratesRepo>(),
-              )..getGovernorates(),
-            ),
-            BlocProvider(
-              create: (_) => EditProfileCubit(
-                repo: getIt<ProfileRepo>(),
-              )..getProfile(),
-            ),
-          ],
-          child: const EditProfileView(),
-        ),
+        builder: (context, state) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => GovernoratesCubit(
+                  repo: getIt<GovernoratesRepo>(),
+                )..getGovernorates(),
+              ),
+              BlocProvider(
+                create: (_) => EditProfileCubit(
+                  repo: getIt<ProfileRepo>(),
+                )..getProfile(),
+              ),
+            ],
+            child: const EditProfileView(),
+          );
+        },
       ),
 
+      // =========================
       // Profile
+      // =========================
       GoRoute(
         path: AppRoutes.profile,
-        builder: (context, state) => BlocProvider(
-          create: (_) => ProfileCubit(
-            repo: getIt<ProfileRepo>(),
-          )..getProfile(),
-          child: const ProfileView(),
-        ),
+        builder: (context, state) {
+          return BlocProvider(
+            create: (_) => ProfileCubit(
+              repo: getIt<ProfileRepo>(),
+            )..getProfile(),
+            child: const ProfileView(),
+          );
+        },
       ),
 
+      // =========================
       // Layout
+      // =========================
       GoRoute(
         path: AppRoutes.layout,
-        builder: (context, state) => MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (_) => LayoutCubit(),
-            ),
-            BlocProvider(
-              create: (_) => getIt<HomeCubit>()..getHomeData(),
-            ),
-          ],
-          child: const LayoutView(),
-        ),
+        builder: (context, state) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => LayoutCubit(),
+              ),
+              BlocProvider(
+                create: (_) => getIt<HomeCubit>()..getHomeData(),
+              ),
+            ],
+            child: const LayoutView(),
+          );
+        },
       ),
     ],
   );

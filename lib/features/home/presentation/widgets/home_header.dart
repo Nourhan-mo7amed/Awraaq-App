@@ -1,6 +1,4 @@
-import 'package:awraq/core/routing/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key});
@@ -9,12 +7,9 @@ class HomeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        GestureDetector(
-          onTap:()=> context.push(AppRoutes.profile),
-          child: const CircleAvatar(
-            radius: 22,
-            backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=11'), // الصورة الشخصية
-          ),
+        const CircleAvatar(
+          radius: 22,
+          backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=11'), // الصورة الشخصية
         ),
         const SizedBox(width: 12),
         const Text(
@@ -27,16 +22,11 @@ class HomeHeader extends StatelessWidget {
         ),
         const Spacer(),
         IconButton(
-          onPressed: () {
-            context.push(AppRoutes.locationDetails);
-          },
+          onPressed: () {},
           icon: const Icon(Icons.location_on_outlined, color: Colors.blue),
         ),
         IconButton(
-          onPressed: () {
-            context.push(AppRoutes.notification);
-          },
-          onPressed: () =>context.push(AppRoutes.notifications),
+          onPressed: () {},
           icon: const Icon(Icons.notifications_none_outlined, color: Colors.blue),
         ),
       ],

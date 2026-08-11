@@ -2,10 +2,11 @@ import 'package:awraq/core/theme/app_colors.dart';
 import 'package:awraq/features/layout/cubit/layout_cubit/layout_cubit.dart';
 import 'package:awraq/features/layout/cubit/layout_cubit/layout_states.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+
 class LayoutView extends StatelessWidget {
-  const LayoutView({super.key, });
+  const LayoutView({super.key});
 
   @override
   Widget build(BuildContext context) {

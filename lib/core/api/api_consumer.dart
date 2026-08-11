@@ -26,4 +26,3 @@ abstract class ApiConsumer {
     bool isFormData = false,
   });
 }
- 

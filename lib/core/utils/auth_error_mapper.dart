@@ -122,10 +122,23 @@ class AuthErrorMapper {
       final value = entry.value;
 
       if (value is List && value.isNotEmpty) {
-        return '$field: ${value.first}';
+        final firstError = value.first.toString();
+        if (entry.key.toString() == 'email' &&
+            (firstError.contains('already been taken') ||
+                firstError.contains('unique') ||
+                firstError.contains('مستخدم من قبل'))) {
+          return 'Email is already registered.';
+        }
+        return '$field: $firstError';
       }
 
       if (value is String && value.isNotEmpty) {
+        if (entry.key.toString() == 'email' &&
+            (value.contains('already been taken') ||
+                value.contains('unique') ||
+                value.contains('مستخدم من قبل'))) {
+          return 'Email is already registered.';
+        }
         return '$field: $value';
       }
     }
