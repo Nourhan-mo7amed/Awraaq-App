@@ -6,6 +6,9 @@
 [![Dart](https://img.shields.io/badge/Dart-Language-0175C2?logo=dart&logoColor=white)](https://dart.dev/)
 [![BLoC](https://img.shields.io/badge/State%20Management-BLoC%2FCubit-blue)](https://bloclibrary.dev/)
 
+
+<img width="1451" height="814" alt="image" src="https://github.com/user-attachments/assets/72c44eb6-ec1a-4cee-b0ed-0087c5c13766" />
+
 ---
 
 ## 🌟 Overview
