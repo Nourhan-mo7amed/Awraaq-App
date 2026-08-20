@@ -4,7 +4,7 @@ import 'package:awraq/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hugeicons/hugeicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class EmptySavedServicesView extends StatelessWidget {
   const EmptySavedServicesView({super.key});
@@ -26,8 +26,8 @@ class EmptySavedServicesView extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20.r),
               ),
               child: Center(
-                child: HugeIcon(
-                  icon: HugeIcons.strokeRoundedBookmarkOff02,
+                child: Icon(
+                  LucideIcons.bookmarkX,
                   color: AppColors.lightPrimary,
                   size: 42.sp,
                 ),

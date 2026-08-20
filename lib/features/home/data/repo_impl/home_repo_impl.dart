@@ -18,9 +18,24 @@ class HomeRepoImpl implements HomeRepo {
       data: null,
     );
 
-    return (response["data"] as List)
-        .map((e) => ServiceModel.fromJson(e))
-        .toList();
+    if (response == null || response is! Map || response["data"] is! List) {
+      return [];
+    }
+
+    final categoriesData = response["data"] as List;
+    final List<ServiceModel> allServices = [];
+
+    for (var cat in categoriesData) {
+      if (cat is Map<String, dynamic> && cat["Procedures"] is List) {
+        for (var proc in cat["Procedures"]) {
+          if (proc is Map<String, dynamic>) {
+            allServices.add(ServiceModel.fromJson(proc));
+          }
+        }
+      }
+    }
+
+    return allServices;
   }
 
   @override
@@ -33,9 +48,26 @@ class HomeRepoImpl implements HomeRepo {
       data: null,
     );
 
-    return (response["data"] as List)
-        .map((e) => ServiceModel.fromJson(e))
-        .toList();
+    if (response == null || response is! Map || response["data"] is! List) {
+      return [];
+    }
+
+    final categoriesData = response["data"] as List;
+    final List<ServiceModel> services = [];
+
+    for (var cat in categoriesData) {
+      if (cat is Map<String, dynamic> &&
+          (cat['id'] == categoryId || categoryId == 0) &&
+          cat["Procedures"] is List) {
+        for (var proc in cat["Procedures"]) {
+          if (proc is Map<String, dynamic>) {
+            services.add(ServiceModel.fromJson(proc));
+          }
+        }
+      }
+    }
+
+    return services;
   }
 
   @override
@@ -45,7 +77,12 @@ class HomeRepoImpl implements HomeRepo {
       data: null,
     );
 
+    if (response == null || response is! Map || response["data"] is! List) {
+      return [];
+    }
+
     return (response["data"] as List)
+        .whereType<Map<String, dynamic>>()
         .map((e) => CategoryModel.fromJson(e))
         .toList();
   }

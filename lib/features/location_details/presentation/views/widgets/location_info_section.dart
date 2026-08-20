@@ -2,7 +2,7 @@ import 'package:awraq/core/theme/app_colors.dart';
 import 'package:awraq/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hugeicons/hugeicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class LocationInfoSection extends StatelessWidget {
   final String name;
@@ -47,7 +47,7 @@ class LocationInfoSection extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 8.h),
               decoration: BoxDecoration(
-                color: Color.fromARGB(16, 82, 225, 82),
+                color: const Color.fromARGB(16, 82, 225, 82),
                 borderRadius: BorderRadius.circular(10.r),
                 border: Border.all(color: AppColors.success, width: 1.2),
               ),
@@ -77,7 +77,7 @@ class LocationInfoSection extends StatelessWidget {
                 Text(
                   '$rating ($reviewsCount)',
                   style: AppTextStyles.regular14.copyWith(
-                    color: Color(0xff444748),
+                    color: const Color(0xff444748),
                   ),
                 ),
               ],
@@ -85,7 +85,7 @@ class LocationInfoSection extends StatelessWidget {
             Text(
               category,
               style: AppTextStyles.regular14.copyWith(
-                color: Color(0xff444748),
+                color: const Color(0xff444748),
               ),
             ),
           ],
@@ -96,8 +96,8 @@ class LocationInfoSection extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HugeIcon(
-              icon: HugeIcons.strokeRoundedLocation01,
+            Icon(
+              LucideIcons.mapPin,
               color: AppColors.lightPrimary,
               size: 18.sp,
             ),
@@ -123,9 +123,10 @@ class LocationInfoSection extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HugeIcon(
-              icon: HugeIcons.strokeRoundedClock01,
+            Icon(
+              LucideIcons.clock,
               size: 18.sp,
+              color: AppColors.lightTextPrimary,
             ),
             SizedBox(width: 8.w),
             Expanded(
@@ -144,9 +145,10 @@ class LocationInfoSection extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HugeIcon(
-              icon: HugeIcons.strokeRoundedCall,
+            Icon(
+              LucideIcons.phone,
               size: 18.sp,
+              color: AppColors.lightPrimary,
             ),
             SizedBox(width: 8.w),
             Expanded(

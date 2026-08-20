@@ -1,7 +1,7 @@
 import 'package:awraq/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hugeicons/hugeicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class LocationHeaderImage extends StatelessWidget {
   final String imageUrl;
@@ -24,8 +24,8 @@ class LocationHeaderImage extends StatelessWidget {
           errorBuilder: (context, error, stackTrace) => Container(
             color: AppColors.lightBorder,
             child: Center(
-              child: HugeIcon(
-                icon: HugeIcons.strokeRoundedBuilding01,
+              child: Icon(
+                LucideIcons.building2,
                 size: 48.sp,
                 color: AppColors.lightTextTertiary,
               ),

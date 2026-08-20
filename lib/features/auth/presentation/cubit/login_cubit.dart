@@ -71,11 +71,15 @@ class LoginCubit extends Cubit<LoginState> {
       emit(const LoginState(status: AuthStatus.success));
     } catch (error) {
       if (isClosed) return;
+      final errorMessage = AuthErrorMapper.message(error);
       emit(
         LoginState(
           status: AuthStatus.failure,
-          passwordErrorText: 'This password is incorrect.',
-          message: AuthErrorMapper.message(error),
+          passwordErrorText: errorMessage.toLowerCase().contains('password') ||
+                  errorMessage.contains('كلمة المرور')
+              ? errorMessage
+              : null,
+          message: errorMessage,
         ),
       );
     }

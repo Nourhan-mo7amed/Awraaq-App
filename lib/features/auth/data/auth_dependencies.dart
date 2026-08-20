@@ -19,6 +19,16 @@ AuthRepositoryImpl buildAuthRepository() {
     ),
   );
 
+  dio.interceptors.add(
+    LogInterceptor(
+      requestBody: true,
+      requestHeader: true,
+      responseBody: true,
+      responseHeader: true,
+      error: true,
+    ),
+  );
+
   return AuthRepositoryImpl(
     remoteDataSource: AuthRemoteDataSourceImpl(dio),
     localDataSource: AuthLocalDataSourceImpl(const FlutterSecureStorage()),

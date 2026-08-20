@@ -103,7 +103,7 @@ class OnboardingView extends StatelessWidget {
                                 : S.of(context).next,
                             onPressed: () {
                               if (cubit.isLastPage) {
-                                context.go(AppRoutes.home);
+                                context.go(AppRoutes.login);
                               } else {
                                 cubit.nextPage();
                               }

@@ -1,47 +1,85 @@
+import 'package:awraq/core/service_lacoator.dart';
 import 'package:awraq/core/theme/app_colors.dart';
 import 'package:awraq/core/theme/app_text_styles.dart';
 import 'package:awraq/features/location_details/data/models/location_details_model.dart';
+import 'package:awraq/features/location_details/presentation/cubit/location_details_cubit.dart';
+import 'package:awraq/features/location_details/presentation/cubit/location_details_state.dart';
 import 'package:awraq/features/location_details/presentation/views/widgets/location_action_buttons.dart';
 import 'package:awraq/features/location_details/presentation/views/widgets/location_header_image.dart';
 import 'package:awraq/features/location_details/presentation/views/widgets/location_info_section.dart';
 import 'package:awraq/features/location_details/presentation/views/widgets/note_card_item.dart';
 import 'package:awraq/features/location_details/presentation/views/widgets/notes_section.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hugeicons/hugeicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-class LocationDetailsView extends StatefulWidget {
+class LocationDetailsView extends StatelessWidget {
+  final dynamic locationId;
   final LocationDetailsModel? location;
 
   const LocationDetailsView({
     super.key,
+    this.locationId,
     this.location,
   });
 
   @override
-  State<LocationDetailsView> createState() => _LocationDetailsViewState();
+  Widget build(BuildContext context) {
+    return BlocProvider<LocationDetailsCubit>(
+      create: (context) {
+        final cubit = getIt<LocationDetailsCubit>();
+        if (location != null) {
+          cubit.setLocationDetails(location!);
+        } else if (locationId != null) {
+          cubit.getLocationDetails(locationId);
+        } else {
+          cubit.getLocationDetails(1);
+        }
+        return cubit;
+      },
+      child: LocationDetailsBody(
+        locationId: locationId,
+        initialLocation: location,
+      ),
+    );
+  }
 }
 
-class _LocationDetailsViewState extends State<LocationDetailsView> {
-  late LocationDetailsModel _locationData;
+class LocationDetailsBody extends StatefulWidget {
+  final dynamic locationId;
+  final LocationDetailsModel? initialLocation;
+
+  const LocationDetailsBody({
+    super.key,
+    this.locationId,
+    this.initialLocation,
+  });
+
+  @override
+  State<LocationDetailsBody> createState() => _LocationDetailsBodyState();
+}
+
+class _LocationDetailsBodyState extends State<LocationDetailsBody> {
+  LocationDetailsModel? _locationData;
   late bool _isFavorite;
 
   @override
   void initState() {
     super.initState();
-    _locationData = widget.location ?? LocationDetailsModel.mockData;
-    _isFavorite = _locationData.isFavorite;
+    _isFavorite = false;
   }
 
   void _handleNoteMenuAction(NoteMenuAction action, LocationNoteModel note) {
+    if (_locationData == null) return;
     switch (action) {
       case NoteMenuAction.edit:
         _showSnackBar('Edit note selected for "${note.userName}"');
         break;
       case NoteMenuAction.delete:
         setState(() {
-          _locationData.notes.removeWhere((n) => n.id == note.id);
+          _locationData!.notes.removeWhere((n) => n.id == note.id);
         });
         _showSnackBar('Note deleted successfully');
         break;
@@ -52,6 +90,7 @@ class _LocationDetailsViewState extends State<LocationDetailsView> {
   }
 
   void _showAddNoteDialog() {
+    if (_locationData == null) return;
     final TextEditingController textController = TextEditingController();
     int selectedRating = 5;
 
@@ -186,7 +225,7 @@ class _LocationDetailsViewState extends State<LocationDetailsView> {
                             onPressed: () {
                               if (textController.text.trim().isNotEmpty) {
                                 setState(() {
-                                  _locationData.notes.insert(
+                                  _locationData!.notes.insert(
                                     0,
                                     LocationNoteModel(
                                       id: DateTime.now()
@@ -245,99 +284,230 @@ class _LocationDetailsViewState extends State<LocationDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.lightBackground,
-      appBar: AppBar(
-        backgroundColor: AppColors.lightBackground,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        leading: Padding(
-          padding: EdgeInsets.only(left: 8.w),
-          child: Center(
-            child: GestureDetector(
-              onTap: () => context.pop(),
-              child: Container(
-                padding: EdgeInsets.all(8.r),
-                decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.06),
-                  borderRadius: BorderRadius.circular(10.r),
+    return BlocBuilder<LocationDetailsCubit, LocationDetailsState>(
+      builder: (context, state) {
+        if (state is LocationDetailsLoading) {
+          return Scaffold(
+            backgroundColor: AppColors.lightBackground,
+            appBar: AppBar(
+              backgroundColor: AppColors.lightBackground,
+              elevation: 0,
+              centerTitle: true,
+              leading: Padding(
+                padding: EdgeInsets.only(left: 8.w),
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () => context.pop(),
+                    child: Container(
+                      padding: EdgeInsets.all(8.r),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.06),
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      child: Icon(
+                        LucideIcons.chevronLeft,
+                        color: AppColors.lightTextPrimary,
+                        size: 20.sp,
+                      ),
+                    ),
+                  ),
                 ),
-                child: HugeIcon(
-                  icon: HugeIcons.strokeRoundedArrowLeft01,
+              ),
+              title: Text(
+                'Location Details',
+                style: AppTextStyles.bold24.copyWith(
                   color: AppColors.lightTextPrimary,
-                  size: 20.sp,
                 ),
               ),
             ),
-          ),
-        ),
-        title: Text(
-          'Location Details',
-          textAlign: TextAlign.center,
-          style: AppTextStyles.bold24.copyWith(
-            color: AppColors.lightTextPrimary,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                _isFavorite = !_isFavorite;
-              });
-              _showSnackBar(
-                _isFavorite ? 'Added to favorites' : 'Removed from favorites',
-              );
-            },
-            icon: HugeIcon(
-              icon: HugeIcons.strokeRoundedHeartAdd,
-              color: _isFavorite ? AppColors.error : AppColors.lightTextPrimary,
-              size: 24.sp,
+            body: const Center(
+              child: CircularProgressIndicator(
+                color: AppColors.lightPrimary,
+              ),
             ),
-          ),
-          SizedBox(width: 4.w),
-        ],
-      ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 1. Header Banner Image
-            LocationHeaderImage(imageUrl: _locationData.imageUrl),
-            SizedBox(height: 16.h),
+          );
+        }
 
-            // 2. Location Info Section (flat, no card)
-            LocationInfoSection(
-              name: _locationData.name,
-              category: _locationData.category,
-              status: _locationData.status,
-              rating: _locationData.rating,
-              reviewsCount: _locationData.reviewsCount,
-              address: _locationData.address,
-              workingHours: _locationData.workingHours,
-              phoneNumber: _locationData.phoneNumber,
+        if (state is LocationDetailsFailure) {
+          return Scaffold(
+            backgroundColor: AppColors.lightBackground,
+            appBar: AppBar(
+              backgroundColor: AppColors.lightBackground,
+              elevation: 0,
+              centerTitle: true,
+              leading: Padding(
+                padding: EdgeInsets.only(left: 8.w),
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () => context.pop(),
+                    child: Container(
+                      padding: EdgeInsets.all(8.r),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.06),
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      child: Icon(
+                        LucideIcons.chevronLeft,
+                        color: AppColors.lightTextPrimary,
+                        size: 20.sp,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              title: Text(
+                'Location Details',
+                style: AppTextStyles.bold24.copyWith(
+                  color: AppColors.lightTextPrimary,
+                ),
+              ),
             ),
-            SizedBox(height: 14.h),
+            body: Center(
+              child: Padding(
+                padding: EdgeInsets.all(24.r),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      LucideIcons.alertTriangle,
+                      size: 48.sp,
+                      color: AppColors.warning,
+                    ),
+                    SizedBox(height: 14.h),
+                    Text(
+                      state.error,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.medium15.copyWith(
+                        color: AppColors.lightTextSecondary,
+                      ),
+                    ),
+                    SizedBox(height: 18.h),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        context
+                            .read<LocationDetailsCubit>()
+                            .getLocationDetails(widget.locationId ?? 1);
+                      },
+                      icon: const Icon(
+                        LucideIcons.refreshCw,
+                        size: 18,
+                        color: AppColors.white,
+                      ),
+                      label: const Text('إعادة المحاولة'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.lightPrimary,
+                        foregroundColor: AppColors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
 
-            // 3. Action Buttons (stacked vertically)
-            LocationActionButtons(
-              onOpenInMaps: () => _showSnackBar('Opening in Maps...'),
-              onGetDirections: () => _showSnackBar('Getting Directions...'),
-            ),
-            SizedBox(height: 20.h),
+        if (state is LocationDetailsSuccess) {
+          _locationData = state.locationDetails;
+          _isFavorite = _locationData?.isFavorite ?? false;
+        }
 
-            // 4. Notes Section Header & Note Cards
-            NotesSection(
-              notes: _locationData.notes,
-              onAddNote: _showAddNoteDialog,
-              onNoteMenuSelected: _handleNoteMenuAction,
+        final locationData = _locationData ?? widget.initialLocation ?? LocationDetailsModel.mockData;
+
+        return Scaffold(
+          backgroundColor: AppColors.lightBackground,
+          appBar: AppBar(
+            backgroundColor: AppColors.lightBackground,
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            centerTitle: true,
+            leading: Padding(
+              padding: EdgeInsets.only(left: 8.w),
+              child: Center(
+                child: GestureDetector(
+                  onTap: () => context.pop(),
+                  child: Container(
+                    padding: EdgeInsets.all(8.r),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.06),
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                    child: Icon(
+                      LucideIcons.chevronLeft,
+                      color: AppColors.lightTextPrimary,
+                      size: 20.sp,
+                    ),
+                  ),
+                ),
+              ),
             ),
-            SizedBox(height: 24.h),
-          ],
-        ),
-      ),
+            title: Text(
+              'Location Details',
+              textAlign: TextAlign.center,
+              style: AppTextStyles.bold24.copyWith(
+                color: AppColors.lightTextPrimary,
+              ),
+            ),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    _isFavorite = !_isFavorite;
+                  });
+                  _showSnackBar(
+                    _isFavorite ? 'Added to favorites' : 'Removed from favorites',
+                  );
+                },
+                icon: Icon(
+                  LucideIcons.heart,
+                  color: _isFavorite ? AppColors.error : AppColors.lightTextPrimary,
+                  size: 24.sp,
+                ),
+              ),
+              SizedBox(width: 4.w),
+            ],
+          ),
+          body: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 1. Header Banner Image
+                LocationHeaderImage(imageUrl: locationData.imageUrl),
+                SizedBox(height: 16.h),
+
+                // 2. Location Info Section (flat, no card)
+                LocationInfoSection(
+                  name: locationData.name,
+                  category: locationData.category,
+                  status: locationData.status,
+                  rating: locationData.rating,
+                  reviewsCount: locationData.reviewsCount,
+                  address: locationData.address,
+                  workingHours: locationData.workingHours,
+                  phoneNumber: locationData.phoneNumber,
+                ),
+                SizedBox(height: 14.h),
+
+                // 3. Action Buttons (stacked vertically)
+                LocationActionButtons(
+                  onOpenInMaps: () => _showSnackBar('Opening in Maps...'),
+                  onGetDirections: () => _showSnackBar('Getting Directions...'),
+                ),
+                SizedBox(height: 20.h),
+
+                // 4. Notes Section Header & Note Cards
+                NotesSection(
+                  notes: locationData.notes,
+                  onAddNote: _showAddNoteDialog,
+                  onNoteMenuSelected: _handleNoteMenuAction,
+                ),
+                SizedBox(height: 24.h),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

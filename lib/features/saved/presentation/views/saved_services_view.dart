@@ -8,7 +8,7 @@ import 'package:awraq/features/saved/presentation/views/widgets/saved_service_se
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hugeicons/hugeicons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class SavedServicesView extends StatefulWidget {
   const SavedServicesView({super.key});
@@ -241,8 +241,8 @@ class _SavedServicesViewState extends State<SavedServicesView> {
                   color: Colors.black.withValues(alpha: 0.06),
                   borderRadius: BorderRadius.circular(10.r),
                 ),
-                child: HugeIcon(
-                  icon: HugeIcons.strokeRoundedArrowLeft01,
+                child: Icon(
+                  LucideIcons.chevronLeft,
                   color: AppColors.lightTextPrimary,
                   size: 20.sp,
                 ),
@@ -272,8 +272,8 @@ class _SavedServicesViewState extends State<SavedServicesView> {
                           width: 1.w,
                         ),
                       ),
-                      child: HugeIcon(
-                        icon: HugeIcons.strokeRoundedBookmark02,
+                      child: Icon(
+                        LucideIcons.bookmark,
                         color: AppColors.lightTextPrimary,
                         size: 20.sp,
                       ),
@@ -314,8 +314,8 @@ class _SavedServicesViewState extends State<SavedServicesView> {
                         width: 1.w,
                       ),
                     ),
-                    child: HugeIcon(
-                      icon: HugeIcons.strokeRoundedBookmark02,
+                    child: Icon(
+                      LucideIcons.bookmark,
                       color: AppColors.lightTextPrimary,
                       size: 22.sp,
                     ),

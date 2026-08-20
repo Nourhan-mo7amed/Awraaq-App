@@ -2,6 +2,7 @@ import 'package:awraq/core/routing/app_routes.dart';
 import 'package:awraq/features/profile/presentation/widgets/profile_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class ProfileSection extends StatelessWidget {
   const ProfileSection({
@@ -32,24 +33,24 @@ class ProfileSection extends StatelessWidget {
             children: isAccount
                 ? [
                     ProfileTile(
-                      icon: Icons.notifications_none,
+                      icon: LucideIcons.bell,
                       title: "Notifications",
                       onTap: () {
                         context.push(AppRoutes.notifications);
                       },
                     ),
-                    Divider(height: 1),
+                    const Divider(height: 1),
                     ProfileTile(
-                      icon: Icons.language,
+                      icon: LucideIcons.globe,
                       title: "Language",
                       trailingText: "English",
                       onTap: () {
                         context.push(AppRoutes.language);
                       },
                     ),
-                    Divider(height: 1),
+                    const Divider(height: 1),
                     ProfileTile(
-                      icon: Icons.light_mode_outlined,
+                      icon: LucideIcons.sun,
                       title: "Light Mode",
                       onTap: () {
                         context.push(AppRoutes.theme);
@@ -58,17 +59,17 @@ class ProfileSection extends StatelessWidget {
                   ]
                 : const [
                     ProfileTile(
-                      icon: Icons.help_outline,
+                      icon: LucideIcons.helpCircle,
                       title: "Help & FAQ",
                     ),
                     Divider(height: 1),
                     ProfileTile(
-                      icon: Icons.support_agent,
+                      icon: LucideIcons.headphones,
                       title: "Contact Support",
                     ),
                     Divider(height: 1),
                     ProfileTile(
-                      icon: Icons.privacy_tip_outlined,
+                      icon: LucideIcons.shieldCheck,
                       title: "Privacy Policy",
                     ),
                   ],

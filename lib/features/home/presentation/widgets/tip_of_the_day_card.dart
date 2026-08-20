@@ -1,4 +1,8 @@
+import 'package:awraq/core/theme/app_colors.dart';
+import 'package:awraq/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class TipOfTheDayCard extends StatelessWidget {
   const TipOfTheDayCard({super.key});
@@ -6,43 +10,55 @@ class TipOfTheDayCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(14.r),
       decoration: BoxDecoration(
-        color: Colors.blue.shade50,
-        borderRadius: BorderRadius.circular(16),
+        color: AppColors.lightSurface,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: AppColors.lightPrimary.withValues(alpha: 0.35),
+          width: 1.5,
+          strokeAlign: BorderSide.strokeAlignInside,
+        ),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          /// Star icon in blue box
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(10.r),
             decoration: BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.circular(12),
+              color: AppColors.lightPrimary,
+              borderRadius: BorderRadius.circular(12.r),
             ),
-            child: const Icon(Icons.star, color: Colors.white, size: 24),
+            child: Icon(
+              LucideIcons.star,
+              color: AppColors.white,
+              size: 22.sp,
+            ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 14.w),
+
+          /// Texts
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Tip of the Day',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
+                  style: AppTextStyles.semiBold14.copyWith(
+                    color: AppColors.lightPrimary,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 Text(
                   'Make sure your documents are valid before starting any application.',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey.shade700,
-                    height: 1.3,
+                  style: AppTextStyles.regular12.copyWith(
+                    color: AppColors.lightTextSecondary,
+                    height: 1.4,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
